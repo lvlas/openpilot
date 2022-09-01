@@ -115,16 +115,16 @@ def create_acc_ui_command(packer, main_on: bool, enabled: bool, hud_control, sto
 
   # Tja_D_Stat
   if enabled:
-    if hud_control.leftLaneDeparture:
+    if hud_control.leftLaneDepart:
       status = 3  # ActiveInterventionLeft
-    elif hud_control.rightLaneDeparture:
+    elif hud_control.rightLaneDepart:
       status = 4  # ActiveInterventionRight
     else:
       status = 2  # Active
   elif main_on:
-    if hud_control.leftLaneDeparture:
+    if hud_control.leftLaneDepart:
       status = 5  # ActiveWarningLeft
-    elif hud_control.rightLaneDeparture:
+    elif hud_control.rightLaneDepart:
       status = 6  # ActiveWarningRight
     else:
       status = 1  # Standby

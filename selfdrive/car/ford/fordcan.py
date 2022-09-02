@@ -96,7 +96,7 @@ def create_lkas_ui_command(packer, main_on: bool, enabled: bool, steer_alert: bo
       lines = 30  # LA_Off
 
   # TODO: use level 1 for no sound when less severe?
-  hands_on_wheel_dsply = 2 if steer_alert else 0,
+  hands_on_wheel_dsply = 2 if steer_alert else 0
 
   values = {
     **stock_values,

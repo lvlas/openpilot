@@ -104,17 +104,17 @@ class CarInterfaceBase(ABC):
     return self.get_steer_feedforward_default
 
   @staticmethod
-  def convert_latacc_to_torque_linear(error, pid_lat_accel, lateral_accel_deadzone, live_torque_params, v_ego):
+  def torque_from_lateral_accel_linear(error, pid_lat_accel, lateral_accel_deadzone, live_torque_params, v_ego):
     # The default is a linear relationship between torque and lateral acceleration (accounting for road roll and steering friction)
     friction_compensation = interp(
       apply_deadzone(error, lateral_accel_deadzone),
       [-FRICTION_THRESHOLD, FRICTION_THRESHOLD],
       [-live_torque_params['friction'], live_torque_params['friction']]
     )
-    return pid_lat_accel * live_torque_params['slope'] + friction_compensation
+    return pid_lat_accel * live_torque_params['lat_accel_factor'] + friction_compensation
 
-  def convert_latacc_to_torque(self):
-    return self.convert_latacc_to_torque_linear
+  def torque_from_lateral_accel(self):
+    return self.torque_from_lateral_accel_linear
 
   # returns a set of default params to avoid repetition in car specific params
   @staticmethod
@@ -160,8 +160,8 @@ class CarInterfaceBase(ABC):
     tune.torque.kf = 1.0
     tune.torque.ki = 0.1
     tune.torque.friction = params['FRICTION']
-    tune.torque.slope = params['LAT_ACCEL_FACTOR']
-    tune.torque.offset = 0.0
+    tune.torque.lat_accel_factor = params['LAT_ACCEL_FACTOR']
+    tune.torque.lat_accel_offset = 0.0
     tune.torque.steeringAngleDeadzoneDeg = steering_angle_deadzone_deg
 
   @abstractmethod

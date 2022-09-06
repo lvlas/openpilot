@@ -23,16 +23,16 @@ class LatControlTorque(LatControl):
     super().__init__(CP, CI)
     self.pid = PIDController(CP.lateralTuning.torque.kp, CP.lateralTuning.torque.ki,
                              k_f=CP.lateralTuning.torque.kf, pos_limit=self.steer_max, neg_limit=-self.steer_max)
-    self.convert_latacc_to_torque = CI.convert_latacc_to_torque()
+    self.torque_from_lateral_accel = CI.torque_from_lateral_accel()
     self.use_steering_angle = CP.lateralTuning.torque.useSteeringAngle
     self.steering_angle_deadzone_deg = CP.lateralTuning.torque.steeringAngleDeadzoneDeg
-    self.update_live_torque_params(CP.lateralTuning.torque.slope, CP.lateralTuning.torque.offset, CP.lateralTuning.torque.friction)
+    self.update_live_torque_params(CP.lateralTuning.torque.lat_accel_factor, CP.lateralTuning.torque.lat_accel_offset, CP.lateralTuning.torque.friction)
 
-  def update_live_torque_params(self, slope, offset, friction):
+  def update_live_torque_params(self, lat_accel_factor, lat_accel_offset, friction):
     self.live_torque_params = {
-      'slope': slope,
+      'lat_accel_factor': lat_accel_factor,
       'friction': friction,
-      'offset': offset
+      'lat_accel_offset': lat_accel_offset
     }
 
   def update(self, active, CS, VM, params, last_actuators, steer_limited, desired_curvature, desired_curvature_rate, llk):
@@ -80,7 +80,7 @@ class LatControlTorque(LatControl):
       pid_log.desiredLateralAccel = desired_lateral_accel
 
     # TODO left is positive in this convention
-      output_torque = -self.convert_latacc_to_torque(error, pid_lat_accel, lateral_accel_deadzone, self.live_torque_params, CS.vEgo)
+      output_torque = -self.torque_from_lateral_accel(error, pid_lat_accel, lateral_accel_deadzone, self.live_torque_params, CS.vEgo)
       pid_log.saturated = self._check_saturation(self.steer_max - abs(output_torque) < 1e-3, CS, steer_limited)
 
     return output_torque, 0.0, pid_log

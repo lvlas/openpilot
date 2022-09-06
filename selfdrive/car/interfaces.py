@@ -111,7 +111,7 @@ class CarInterfaceBase(ABC):
       [-FRICTION_THRESHOLD, FRICTION_THRESHOLD],
       [-live_torque_params['friction'], live_torque_params['friction']]
     )
-    return pid_lat_accel * live_torque_params['lat_accel_factor'] + friction_compensation
+    return (pid_lat_accel + friction_compensation) / live_torque_params['lat_accel_factor']
 
   def torque_from_lateral_accel(self):
     return self.torque_from_lateral_accel_linear

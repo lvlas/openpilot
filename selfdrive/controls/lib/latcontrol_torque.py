@@ -28,11 +28,11 @@ class LatControlTorque(LatControl):
     self.steering_angle_deadzone_deg = CP.lateralTuning.torque.steeringAngleDeadzoneDeg
     self.update_live_torque_params(CP.lateralTuning.torque.latAccelFactor, CP.lateralTuning.torque.latAccelOffset, CP.lateralTuning.torque.friction)
 
-  def update_live_torque_params(self, lat_accel_factor, lat_accel_offset, friction):
+  def update_live_torque_params(self, latAccelFactor, latAccelOffset, friction):
     self.live_torque_params = {
-      'lat_accel_factor': lat_accel_factor,
+      'latAccelFactor': latAccelFactor,
       'friction': friction,
-      'lat_accel_offset': lat_accel_offset
+      'latAccelOffset': latAccelOffset
     }
 
   def update(self, active, CS, VM, params, last_actuators, steer_limited, desired_curvature, desired_curvature_rate, llk):

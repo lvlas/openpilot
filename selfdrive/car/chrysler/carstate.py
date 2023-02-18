@@ -33,8 +33,8 @@ class CarState(CarStateBase):
     ret.seatbeltUnlatched = cp.vl["ORC_1"]["SEATBELT_DRIVER_UNLATCHED"] == 1
 
     ret.brakePressed = cp.vl["ESP_1"]["BRAKE_PEDAL"] == 1  # driver-only
-    # ret.brake = cp.vl["ESP_8"]["BRAKE_VAL_TOTAL"]
-    ret.brakeLights = bool(cp.vl["ESP_1"]["BRAKE_LIGHT"])
+    ret.brake = cp.vl["ESP_8"]["BRAKE_VAL_TOTAL"]
+    # ret.brakeLights = bool(cp.vl["ESP_1"]["BRAKE_LIGHT"])
     ret.gas = cp.vl["ACCEL_GAS_22F"]["GAS_PEDAL_POS"]
     ret.gasPressed = ret.gas > 1e-5
 

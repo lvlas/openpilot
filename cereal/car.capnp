@@ -114,6 +114,7 @@ struct CarEvent @0x9b1657f34caf3ad3 {
     canBusMissing @111;
     controlsdLagging @112;
     resumeBlocked @113;
+    hightorqsteerUnavailable @ 116;
 
     radarCanErrorDEPRECATED @15;
     communityFeatureDisallowedDEPRECATED @62;
@@ -184,6 +185,8 @@ struct CarState {
   stockAeb @30 :Bool;
   stockFcw @31 :Bool;
   espDisabled @32 :Bool;
+  hightorqUnavailable @46 :Bool;
+  accgasOverride @47 :Bool;
   accFaulted @42 :Bool;
 
   # cruise state
@@ -228,8 +231,15 @@ struct CarState {
     speedOffset @3 :Float32;
     standstill @4 :Bool;
     nonAdaptive @5 :Bool;
+    followSettings @7 :FollowSettings;
   }
 
+enum FollowSettings {
+    near @0;
+    mid @1;
+    far @2;
+    experimental @3; #this switches to E2E long
+  }
   enum GearShifter {
     unknown @0;
     park @1;
@@ -373,6 +383,8 @@ struct CarControl {
     leftLaneVisible @7: Bool;
     rightLaneDepart @8: Bool;
     leftLaneDepart @9: Bool;
+    leadDistance @10: Float32;
+    leadvRel @11: Float32;
 
     enum VisualAlert {
       # these are the choices from the Honda
@@ -426,6 +438,7 @@ struct CarParams {
   enableBsm @56 :Bool;       # blind spot monitoring
   flags @64 :UInt32;         # flags for car specific quirks
   experimentalLongitudinalAvailable @71 :Bool;
+  enablehybridEcu @72 :Bool; #hydrid ecu
 
   minEnableSpeed @7 :Float32;
   minSteerSpeed @8 :Float32;

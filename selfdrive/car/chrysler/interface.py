@@ -4,7 +4,7 @@ from panda import Panda
 from selfdrive.car import STD_CARGO_KG, get_safety_config
 from selfdrive.car.chrysler.values import CAR, RAM_HD, RAM_DT, RAM_CARS, ChryslerFlags
 from selfdrive.car.interfaces import CarInterfaceBase
-
+from common.params import Params
 
 class CarInterface(CarInterfaceBase):
   @staticmethod

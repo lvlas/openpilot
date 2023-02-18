@@ -574,10 +574,10 @@ class Controls:
     CC = car.CarControl.new_message()
     CC.enabled = self.enabled
 
-    if CS.cruiseState.followSettings != 4:
-       Params().put_bool("ExperimentalLongitudinalEnabled", False)
-    else:
-       Params().put_bool("ExperimentalLongitudinalEnabled", True)
+    #if CS.cruiseState.followSettings != 4:
+    #   Params().put_bool("ExperimentalLongitudinalEnabled", False)
+    #else:
+    #   Params().put_bool("ExperimentalLongitudinalEnabled", True)
 
     # Check which actuators can be enabled
     standstill = CS.vEgo <= max(self.CP.minSteerSpeed, MIN_LATERAL_CONTROL_SPEED) or CS.standstill

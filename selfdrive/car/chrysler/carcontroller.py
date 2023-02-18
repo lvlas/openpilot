@@ -72,7 +72,7 @@ class CarController:
     self.packer = CANPacker(dbc_name)
     self.params = CarControllerParams(CP)
 
-  def update(self, CC, CS):
+  def update(self, CC, CS, now_nanos):
 
     # *** compute control surfaces ***
     enabled = CC.enabled

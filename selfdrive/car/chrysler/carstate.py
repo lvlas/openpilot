@@ -68,8 +68,8 @@ class CarState(CarStateBase):
     # CRUISE_STATE is a three bit msg, 0 is off, 1 and 2 are Non-ACC mode, 3 and 4 are ACC mode, find if there are other states too
     ret.cruiseState.nonAdaptive = cp.vl["DASHBOARD"]["CRUISE_STATE"] in (1, 2)
 
-    # Params().put_bool("ExperimentalLongitudinalEnabled", False)
 
+    self.desiredExperimentalToggleStatus = False
     if cp.vl["DASHBOARD"]["CRUISE_ICON"] in (2, 8, 12):
       ret.cruiseState.followSettings = 1
     elif cp.vl["DASHBOARD"]["CRUISE_ICON"] in (3, 9, 13):
@@ -78,8 +78,12 @@ class CarState(CarStateBase):
       ret.cruiseState.followSettings = 3
     else:
       ret.cruiseState.followSettings = 4
-      Params().put_bool("ExperimentalLongitudinalEnabled", True)
+      self.desiredExperimentalToggleStatus = True
 
+    if self.desiredExperimentalToggleStatus != Params().get_bool('ExperimentalMode'):
+      Params().put_bool("ExperimentalMode", self.desiredExperimentalToggleStatus)
+    if self.desiredExperimentalToggleStatus != Params().get_bool('ExperimentalLongitudinalEnabled'):
+	  Params().put_bool("ExperimentalLongitudinalEnabled", self.desiredExperimentalToggleStatus)
 
     ret.steeringTorque = cp.vl["EPS_2"]["TORQUE_DRIVER"]/4
     ret.steeringTorqueEps = cp.vl["EPS_2"]["TORQUE_MOTOR"]/4 if Params().get_bool("ChryslerMangoLat") else cp.vl["EPS_2"]["TORQUE_MOTOR"]

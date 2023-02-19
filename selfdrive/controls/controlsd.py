@@ -841,7 +841,7 @@ class Controls:
     self.prof.checkpoint("Ratekeeper", ignore=True)
 
     self.is_metric = self.params.get_bool("IsMetric")
-    self.experimental_mode = self.params.get_bool("ExperimentalMode") and self.CP.openpilotLongitudinalControl and not self.CP.pauseExperimentalMode
+    self.experimental_mode = self.params.get_bool("ExperimentalMode") and self.CP.openpilotLongitudinalControl
 
     # Sample data from sockets and get a carState
     CS = self.data_sample()

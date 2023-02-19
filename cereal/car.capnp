@@ -187,7 +187,6 @@ struct CarState {
   espDisabled @32 :Bool;
   hightorqUnavailable @46 :Bool;
   accgasOverride @47 :Bool;
-  pauseExperimentalMode @48 :Bool;
   accFaulted @42 :Bool;
 
   # cruise state
@@ -439,6 +438,7 @@ struct CarParams {
   enableBsm @56 :Bool;       # blind spot monitoring
   flags @64 :UInt32;         # flags for car specific quirks
   experimentalLongitudinalAvailable @71 :Bool;
+  pauseExperimentalMode @73 :Bool;
   enablehybridEcu @72 :Bool; #hydrid ecu
 
   minEnableSpeed @7 :Float32;

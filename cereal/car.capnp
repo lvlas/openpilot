@@ -187,6 +187,7 @@ struct CarState {
   espDisabled @32 :Bool;
   hightorqUnavailable @46 :Bool;
   accgasOverride @47 :Bool;
+  pauseExperimentalMode @48 :Bool;
   accFaulted @42 :Bool;
 
   # cruise state

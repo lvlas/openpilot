@@ -574,11 +574,6 @@ class Controls:
     CC = car.CarControl.new_message()
     CC.enabled = self.enabled
 
-    #if CS.cruiseState.followSettings != 4:
-    #   Params().put_bool("ExperimentalLongitudinalEnabled", False)
-    #else:
-    #   Params().put_bool("ExperimentalLongitudinalEnabled", True)
-
     # Check which actuators can be enabled
     standstill = CS.vEgo <= max(self.CP.minSteerSpeed, MIN_LATERAL_CONTROL_SPEED) or CS.standstill
     CC.latActive = self.active and not CS.steerFaultTemporary and not CS.steerFaultPermanent and \
@@ -846,7 +841,7 @@ class Controls:
     self.prof.checkpoint("Ratekeeper", ignore=True)
 
     self.is_metric = self.params.get_bool("IsMetric")
-    self.experimental_mode = self.params.get_bool("ExperimentalMode") and self.CP.openpilotLongitudinalControl
+    self.experimental_mode = self.params.get_bool("ExperimentalMode") and self.CP.openpilotLongitudinalControl and not self.CP.pauseExperimentalMode
 
     # Sample data from sockets and get a carState
     CS = self.data_sample()

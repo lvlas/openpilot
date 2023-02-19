@@ -93,6 +93,7 @@ class CarInterface(CarInterfaceBase):
     ret.centerToFront = ret.wheelbase * 0.44
     ret.enableBsm = 720 in fingerprint[0]
     ret.enablehybridEcu = 655 in fingerprint[0] or 291 in fingerprint[0]
+    ret.pauseExperimentalMode = False
 
     return ret
 
@@ -102,6 +103,8 @@ class CarInterface(CarInterfaceBase):
 
     ret.steerFaultPermanent = self.CC.steerErrorMod
     ret.hightorqUnavailable = self.CC.hightorqUnavailable
+
+    ret.pauseExperimentalMode = self.CS.cruiseState.followSettings != 4
 
     # events
     events = self.create_common_events(ret, extra_gears=[car.CarState.GearShifter.low])

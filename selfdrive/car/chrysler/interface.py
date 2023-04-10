@@ -24,26 +24,51 @@ class CarInterface(CarInterfaceBase):
     elif candidate in RAM_DT:
       ret.safetyConfigs[0].safetyParam |= Panda.FLAG_CHRYSLER_RAM_DT
 
+    #ret.minSteerSpeed = 3.8  # m/s
+
+    #ret.lateralTuning.pid.kpBP = [0., 10., 35.]
+    #ret.lateralTuning.pid.kpV = [0.02, 0.02, 0.02]
+
+    #ret.lateralTuning.pid.kiBP = [0., 15., 30.]
+    #ret.lateralTuning.pid.kiV = [0.003, 0.003, 0.004]
+
+    #ret.lateralTuning.pid.kf = 0.00002   # full torque for 10 deg at 80mph means 0.00007818594
+
+    #ret.experimentalLongitudinalAvailable = Params().get_bool('ChryslerMangoLong')
+    #ret.openpilotLongitudinalControl = Params().get_bool('ChryslerMangoLong')
+
+    # Long tuning Params -  make individual params for cars, baseline Pacifica Hybrid
+    #ret.longitudinalTuning.kpBP = [0., 6., 10., 35.]
+    #ret.longitudinalTuning.kpV = [.4, .6, 0.5, .2]
+    #ret.longitudinalTuning.kiBP = [0., 30.]
+    #ret.longitudinalTuning.kiV = [.001, .001]
+    #ret.stoppingControl = True
+    #ret.stoppingDecelRate = 0.2
+    
+    
+    
     ret.minSteerSpeed = 3.8  # m/s
 
-    ret.lateralTuning.pid.kpBP = [0., 10., 35.]
-    ret.lateralTuning.pid.kpV = [0.02, 0.02, 0.02]
+    ret.lateralTuning.pid.kpBP = [0., 5., 18.]
+    ret.lateralTuning.pid.kpV = [0.01, 0.01, 0.01]
 
-    ret.lateralTuning.pid.kiBP = [0., 15., 30.]
-    ret.lateralTuning.pid.kiV = [0.003, 0.003, 0.004]
+    ret.lateralTuning.pid.kiBP = [0., 8., 15.]
+    ret.lateralTuning.pid.kiV = [0.002, 0.002, 0.002]
 
-    ret.lateralTuning.pid.kf = 0.00002   # full torque for 10 deg at 80mph means 0.00007818594
+    ret.lateralTuning.pid.kf = 0.00001   # full torque for 10 deg at 80mph means 0.00007818594
 
     ret.experimentalLongitudinalAvailable = Params().get_bool('ChryslerMangoLong')
     ret.openpilotLongitudinalControl = Params().get_bool('ChryslerMangoLong')
 
     # Long tuning Params -  make individual params for cars, baseline Pacifica Hybrid
-    ret.longitudinalTuning.kpBP = [0., 6., 10., 35.]
-    ret.longitudinalTuning.kpV = [.4, .6, 0.5, .2]
-    ret.longitudinalTuning.kiBP = [0., 30.]
+    ret.longitudinalTuning.kpBP = [0., 3., 5., 18.]
+    ret.longitudinalTuning.kpV = [.2, .3, 0.3, .1]
+    ret.longitudinalTuning.kiBP = [0., 15.]
     ret.longitudinalTuning.kiV = [.001, .001]
     ret.stoppingControl = True
-    ret.stoppingDecelRate = 0.2
+    ret.stoppingDecelRate = 0.2    
+    
+    
 
     if candidate in (CAR.PACIFICA_2019_HYBRID, CAR.PACIFICA_2020, CAR.JEEP_CHEROKEE_2019):
       # TODO: allow 2019 cars to steer down to 13 m/s if already engaged.
@@ -63,11 +88,15 @@ class CarInterface(CarInterfaceBase):
       ret.steerRatio = 16.7
       #ret.steerActuatorDelay = 0.2
 
-      CarInterfaceBase.configure_torque_tune(candidate, ret.lateralTuning)
       #ret.lateralTuning.init('pid')
       #ret.lateralTuning.pid.kpBP, ret.lateralTuning.pid.kiBP = [[9., 20.], [9., 20.]]
       #ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.15, 0.30], [0.03, 0.05]]
       #ret.lateralTuning.pid.kf = 0.00006
+      
+      ret.lateralTuning.init('pid')
+      ret.lateralTuning.pid.kpBP, ret.lateralTuning.pid.kiBP = [[4., 10.], [4., 10.]]
+      ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.08, 0.15], [0.02, 0.03]]
+      ret.lateralTuning.pid.kf = 0.00003      
 
     # Ram
     elif candidate == CAR.RAM_1500:

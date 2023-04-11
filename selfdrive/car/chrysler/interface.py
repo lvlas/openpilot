@@ -46,29 +46,12 @@ class CarInterface(CarInterfaceBase):
     #ret.stoppingDecelRate = 0.2
     
     
-    
-    ret.minSteerSpeed = 3.8  # m/s
-
-    ret.lateralTuning.pid.kpBP = [0., 5., 18.]
-    ret.lateralTuning.pid.kpV = [0.01, 0.01, 0.01]
-
-    ret.lateralTuning.pid.kiBP = [0., 8., 15.]
-    ret.lateralTuning.pid.kiV = [0.002, 0.002, 0.002]
-
-    ret.lateralTuning.pid.kf = 0.00001   # full torque for 10 deg at 80mph means 0.00007818594
-
-    ret.experimentalLongitudinalAvailable = Params().get_bool('ChryslerMangoLong')
-    ret.openpilotLongitudinalControl = Params().get_bool('ChryslerMangoLong')
-
-    # Long tuning Params -  make individual params for cars, baseline Pacifica Hybrid
-    ret.longitudinalTuning.kpBP = [0., 3., 5., 18.]
-    ret.longitudinalTuning.kpV = [.2, .3, 0.3, .1]
-    ret.longitudinalTuning.kiBP = [0., 15.]
-    ret.longitudinalTuning.kiV = [.001, .001]
-    ret.stoppingControl = True
-    ret.stoppingDecelRate = 0.2    
-    
-    
+    ret.lateralTuning.pid.kpBP, ret.lateralTuning.pid.kiBP, ret.lateralTuning.pid.kdBP = [[0., 10.], [0., 30.], [0., 30.]]
+    ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV, ret.lateralTuning.pid.kdV = [[0.01, 0.03], [0.02, 0.03], [0.1, 1.]]
+    ret.lateralTuning.pid.kf = 0.00002   # full torque for 10 deg at 80mph means 0.00007818594        
+    ret.steerRateCost = 0.4
+    ret.steerLimitTimer = 0.7   
+    ret.minSteerSpeed = 0
 
     if candidate in (CAR.PACIFICA_2019_HYBRID, CAR.PACIFICA_2020, CAR.JEEP_CHEROKEE_2019):
       # TODO: allow 2019 cars to steer down to 13 m/s if already engaged.
@@ -79,24 +62,14 @@ class CarInterface(CarInterfaceBase):
       ret.wheelbase = 3.089  # in meters for Pacifica Hybrid 2017
       ret.steerRatio = 16.2  # Pacifica Hybrid 2017
       ret.mass = 2242. + STD_CARGO_KG  # kg curb weight Pacifica Hybrid 2017     
-      CarInterfaceBase.configure_torque_tune(candidate, ret.lateralTuning)
+      ##########CarInterfaceBase.configure_torque_tune(candidate, ret.lateralTuning)
 
     # Jeep
     elif candidate in (CAR.JEEP_CHEROKEE, CAR.JEEP_CHEROKEE_2019):
       ret.mass = 1778 + STD_CARGO_KG
       ret.wheelbase = 2.71
       ret.steerRatio = 16.7
-      #ret.steerActuatorDelay = 0.2
-
-      #ret.lateralTuning.init('pid')
-      #ret.lateralTuning.pid.kpBP, ret.lateralTuning.pid.kiBP = [[9., 20.], [9., 20.]]
-      #ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.15, 0.30], [0.03, 0.05]]
-      #ret.lateralTuning.pid.kf = 0.00006
-      
-      ret.lateralTuning.init('pid')
-      ret.lateralTuning.pid.kpBP, ret.lateralTuning.pid.kiBP = [[4., 10.], [4., 10.]]
-      ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.08, 0.15], [0.02, 0.03]]
-      ret.lateralTuning.pid.kf = 0.00003      
+      #ret.steerActuatorDelay = 0.2 
 
     # Ram
     elif candidate == CAR.RAM_1500:

@@ -46,13 +46,18 @@ class CarInterface(CarInterfaceBase):
     #ret.stoppingDecelRate = 0.2
     
     
-    ret.lateralTuning.pid.kpBP, ret.lateralTuning.pid.kiBP = [[0., 10.], [0., 30.]]
-    #ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.01, 0.03], [0.02, 0.03]]
-    ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.2], [0.06]]
-    ret.lateralTuning.pid.kf = 0.00002   # full torque for 10 deg at 80mph means 0.00007818594        
-    #ret.steerRateCost = 0.4
-    #ret.steerLimitTimer = 0.7   
+    ret.lateralTuning.pid.kpBP, ret.lateralTuning.pid.kiBP = [[0.0], [0.0]]
+    ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.01, 0.03], [0.02, 0.03]]
+    ret.lateralTuning.pid.kf = 0.00007818594   # full torque for 10 deg at 80mph means 0.00007818594        
     ret.minSteerSpeed = 0
+    
+    #ret.lateralTuning.pid.kpBP, ret.lateralTuning.pid.kiBP = [[0., 10.], [0., 30.]]
+    #ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.01, 0.03], [0.02, 0.03]]
+    ######neslo ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.2], [0.06]]
+    #ret.lateralTuning.pid.kf = 0.00002   # full torque for 10 deg at 80mph means 0.00007818594        
+    ##ret.steerRateCost = 0.4
+    ##ret.steerLimitTimer = 0.7   
+    #ret.minSteerSpeed = 0
 
     if candidate in (CAR.PACIFICA_2019_HYBRID, CAR.PACIFICA_2020, CAR.JEEP_CHEROKEE_2019):
       # TODO: allow 2019 cars to steer down to 13 m/s if already engaged.

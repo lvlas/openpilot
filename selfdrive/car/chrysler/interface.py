@@ -46,8 +46,13 @@ class CarInterface(CarInterfaceBase):
     #ret.stoppingDecelRate = 0.2
     
     
-    ret.lateralTuning.pid.kpBP, ret.lateralTuning.pid.kiBP = [[0.0], [0.0]]
-    ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.01, 0.03], [0.02, 0.03]]
+    #ret.lateralTuning.pid.kpBP, ret.lateralTuning.pid.kiBP = [[0.0], [0.0]]
+    #ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.01, 0.03], [0.02, 0.03]]
+    #ret.lateralTuning.pid.kf = 0.00007818594   # full torque for 10 deg at 80mph means 0.00007818594        
+    #ret.minSteerSpeed = 0
+    
+    ret.lateralTuning.pid.kpBP, ret.lateralTuning.pid.kiBP = [[0., 5.], [0., 15.]]
+    ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.005, 0.015], [0.01, 0.02]]
     ret.lateralTuning.pid.kf = 0.00007818594   # full torque for 10 deg at 80mph means 0.00007818594        
     ret.minSteerSpeed = 0
     

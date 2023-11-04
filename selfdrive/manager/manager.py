@@ -47,7 +47,7 @@ def manager_init() -> None:
     ("OpenpilotEnabledToggle", "1"),
     ("LongitudinalPersonality", str(log.LongitudinalPersonality.standard)),
     ("LkasFullRangeAvailable", "1"),
-    ("ChryslerMangoLong", "0"),
+    ("ChryslerMangoLong", "1"),
     ("ChryslerMangoLat", "1"),
     ("ChryslerMadGas", "1"),
   ]

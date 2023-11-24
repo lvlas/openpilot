@@ -1,3 +1,5 @@
+from tinygrad.nn import Conv2d
+from tinygrad.nn import optim
 from tinygrad.tensor import Tensor
 from tinygrad.helpers import prod, dtypes, ImageDType
 from extra.onnx import safe_numpy

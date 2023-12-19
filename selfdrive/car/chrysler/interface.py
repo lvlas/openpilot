@@ -50,6 +50,20 @@ class CarInterface(CarInterfaceBase):
       ret.minSteerSpeed = 17.5  if not Params().get_bool('ChryslerMangoLat') and not Params().get_bool('LkasFullRangeAvailable') else 0 # m/s 17 on the way up, 13 on the way down once engaged.
     
     # Chrysler
+    #if candidate in (CAR.PACIFICA_2017_HYBRID, CAR.PACIFICA_2018, CAR.PACIFICA_2018_HYBRID, CAR.PACIFICA_2019_HYBRID, CAR.PACIFICA_2020):
+    #  ret.wheelbase = 3.089
+    #  ret.steerRatio = 16.2  # Pacifica Hybrid 2017
+    #  ret.mass = 2242.
+    #  CarInterfaceBase.configure_torque_tune(candidate, ret.lateralTuning)
+
+    # Jeep
+    #elif candidate in (CAR.JEEP_CHEROKEE, CAR.JEEP_CHEROKEE_2019):
+    #  ret.mass = 1778
+    #  ret.wheelbase = 2.71
+    #  ret.steerRatio = 16.7
+    #  ret.steerActuatorDelay = 0.2
+
+    # Chrysler
     if candidate in (CAR.PACIFICA_2017_HYBRID, CAR.PACIFICA_2018, CAR.PACIFICA_2018_HYBRID, CAR.PACIFICA_2019_HYBRID, CAR.PACIFICA_2020):
       ret.wheelbase = 3.089
       ret.steerRatio = 16.2  # Pacifica Hybrid 2017
@@ -61,12 +75,13 @@ class CarInterface(CarInterfaceBase):
       ret.mass = 1778
       ret.wheelbase = 2.71
       ret.steerRatio = 16.7
-      ret.steerActuatorDelay = 0.2
+      CarInterfaceBase.configure_torque_tune(candidate, ret.lateralTuning)
+      #ret.steerActuatorDelay = 0.2      
 
-      ret.lateralTuning.init('pid')
-      ret.lateralTuning.pid.kpBP, ret.lateralTuning.pid.kiBP = [[9., 20.], [9., 20.]]
-      ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.15, 0.30], [0.03, 0.05]]
-      ret.lateralTuning.pid.kf = 0.00006
+      #ret.lateralTuning.init('pid')
+      #ret.lateralTuning.pid.kpBP, ret.lateralTuning.pid.kiBP = [[9., 20.], [9., 20.]]
+      #ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.15, 0.30], [0.03, 0.05]]
+      #ret.lateralTuning.pid.kf = 0.00006
 
     # Ram
     elif candidate == CAR.RAM_1500:

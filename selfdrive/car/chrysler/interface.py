@@ -4,6 +4,8 @@ from panda import Panda
 from openpilot.selfdrive.car import get_safety_config
 from openpilot.selfdrive.car.chrysler.values import CAR, RAM_HD, RAM_DT, RAM_CARS, ChryslerFlags
 from openpilot.selfdrive.car.interfaces import CarInterfaceBase
+from openpilot.common.params import Params
+
 
 
 class CarInterface(CarInterfaceBase):
@@ -90,16 +92,16 @@ class CarInterface(CarInterfaceBase):
   def _update(self, c):
     ret = self.CS.update(self.cp, self.cp_cam)
 
+    ret.steerFaultPermanent = self.CC.steerErrorMod
+    ret.hightorqUnavailable = self.CC.hightorqUnavailable    
+    
     # events
     events = self.create_common_events(ret, extra_gears=[car.CarState.GearShifter.low])
 
-    # Low speed steer alert hysteresis logic
-    if self.CP.minSteerSpeed > 0. and ret.vEgo < (self.CP.minSteerSpeed + 0.5):
-      self.low_speed_alert = True
-    elif ret.vEgo > (self.CP.minSteerSpeed + 1.):
-      self.low_speed_alert = False
-    if self.low_speed_alert:
+    if ret.vEgo < self.CP.minSteerSpeed and not Params().get_bool('ChryslerMangoLat') and not Params().get_bool('LkasFullRangeAvailable'):
       events.add(car.CarEvent.EventName.belowSteerSpeed)
+    if self.CC.acc_enabled and (self.CS.accbrakeFaulted or self.CS.accengFaulted):
+      events.add(car.CarEvent.EventName.accFaulted)
 
     ret.events = events.to_msg()
 

@@ -564,6 +564,14 @@ EVENTS: Dict[int, Dict[str, Union[Alert, AlertCallbackType]]] = {
     ET.PERMANENT: NormalPermanentAlert("Fan Malfunction", "Likely Hardware Issue"),
   },
 
+  EventName.hightorqsteerUnavailable: {
+    ET.PERMANENT: Alert(
+      "Mango Lat Not Enabled",
+      "Bring the vehicle to stop in fwd gear to re-enable",
+      AlertStatus.normal, AlertSize.mid,
+      Priority.LOWEST, VisualAlert.none, AudibleAlert.none, .2),
+  },
+  
   # Camera is not outputting frames
   EventName.cameraMalfunction: {
     ET.PERMANENT: camera_malfunction_alert,

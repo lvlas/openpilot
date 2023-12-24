@@ -117,6 +117,7 @@ struct CarEvent @0x9b1657f34caf3ad3 {
     locationdPermanentError @118;
     paramsdTemporaryError @50;
     paramsdPermanentError @119;
+    hightorqsteerUnavailable @ 120;
 
     radarCanErrorDEPRECATED @15;
     communityFeatureDisallowedDEPRECATED @62;

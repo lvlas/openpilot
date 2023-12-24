@@ -227,8 +227,8 @@ static int chrysler_fwd_hook(int bus_num, int addr) {
   return bus_fwd;
 }
 
-static safety_config chrysler_init(uint16_t param) {
-  safety_config ret;
+//static safety_config chrysler_init(uint16_t param) {
+//  safety_config ret;
   /*if (GET_FLAG(param, CHRYSLER_PARAM_RAM_DT)) {
     chrysler_platform = CHRYSLER_RAM_DT;
     chrysler_addrs = &CHRYSLER_RAM_DT_ADDRS;
@@ -244,11 +244,11 @@ static safety_config chrysler_init(uint16_t param) {
     chrysler_addrs = &CHRYSLER_ADDRS;
     ret = BUILD_SAFETY_CFG(chrysler_rx_checks, CHRYSLER_TX_MSGS);
   }*/
-  return ret;
-}
+//  return ret;
+//}
 
 const safety_hooks chrysler_hooks = {
-  .init = chrysler_init,
+  //.init = chrysler_init,
   .rx = chrysler_rx_hook,
   .tx = chrysler_tx_hook,
   .fwd = chrysler_fwd_hook,

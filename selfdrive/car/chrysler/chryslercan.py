@@ -67,7 +67,7 @@ def create_wheel_buttons(packer, counter, button_type):
     "COUNTER": counter
   }
 
-    return packer.make_can_msg("WHEEL_BUTTONS", 0, values)
+  return packer.make_can_msg("WHEEL_BUTTONS", 0, values)
 
 def create_op_acc_1(packer, accel_active, trq_val, acc_counter):
   values = { # 20ms

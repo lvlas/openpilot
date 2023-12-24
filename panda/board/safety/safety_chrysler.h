@@ -18,6 +18,18 @@ const CanMsg CHRYSLER_TX_MSGS[] = {{571, 0, 3}, {658, 0, 6}, {678, 0, 8},
 //};
 //#define CHRYSLER_ADDR_CHECK_LEN (sizeof(chrysler_addr_checks) / sizeof(chrysler_addr_checks[0]))
 
+// CAN messages for Chrysler/Jeep platforms
+const ChryslerAddrs CHRYSLER_ADDRS = {
+  .EPS_2            = 0x220,  // EPS driver input torque
+  .ESP_1            = 0x140,  // Brake pedal and vehicle speed
+  .ESP_8            = 0x11C,  // Brake pedal and vehicle speed
+  .ECM_5            = 0x22F,  // Throttle position sensor
+  .DAS_3            = 0x1F4,  // ACC engagement states from DASM
+  .DAS_6            = 0x2A6,  // LKAS HUD and auto headlight control from DASM
+  .LKAS_COMMAND     = 0x292,  // LKAS controls from DASM
+  .CRUISE_BUTTONS   = 0x23B,  // Cruise control buttons
+};
+
 RxCheck chrysler_rx_checks[] = {
   {.msg = {{CHRYSLER_ADDRS.EPS_2, 0, 8, .check_checksum = true, .max_counter = 15U, .frequency = 100U}, { 0 }, { 0 }}},
   {.msg = {{CHRYSLER_ADDRS.ESP_1, 0, 8, .check_checksum = true, .max_counter = 15U, .frequency = 50U}, { 0 }, { 0 }}},

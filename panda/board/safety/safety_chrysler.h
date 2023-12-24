@@ -9,14 +9,14 @@ const int CHRYSLER_STANDSTILL_THRSLD = 10;  // about 1m/s
 const CanMsg CHRYSLER_TX_MSGS[] = {{571, 0, 3}, {658, 0, 6}, {678, 0, 8},
                                    {502, 0, 8}, {503, 0, 8}, {626, 0, 8}, {838, 0, 2}};  //OP long msgs to WP
 
-AddrCheckStruct chrysler_addr_checks[] = {
-  {.msg = {{544, 0, 8, .check_checksum = true, .max_counter = 15U, .expected_timestep = 10000U}, { 0 }, { 0 }}},
-  {.msg = {{514, 0, 8, .check_checksum = false, .max_counter = 0U, .expected_timestep = 10000U}, { 0 }, { 0 }}},
-  {.msg = {{500, 0, 8, .check_checksum = true, .max_counter = 15U, .expected_timestep = 20000U}, { 0 }, { 0 }}},
-  {.msg = {{308, 0, 8, .check_checksum = false, .max_counter = 15U,  .expected_timestep = 20000U}, { 0 }, { 0 }}},
-  {.msg = {{320, 0, 8, .check_checksum = true, .max_counter = 15U,  .expected_timestep = 20000U}, { 0 }, { 0 }}},
-};
-#define CHRYSLER_ADDR_CHECK_LEN (sizeof(chrysler_addr_checks) / sizeof(chrysler_addr_checks[0]))
+//AddrCheckStruct chrysler_addr_checks[] = {
+//  {.msg = {{544, 0, 8, .check_checksum = true, .max_counter = 15U, .expected_timestep = 10000U}, { 0 }, { 0 }}},
+//  {.msg = {{514, 0, 8, .check_checksum = false, .max_counter = 0U, .expected_timestep = 10000U}, { 0 }, { 0 }}},
+//  {.msg = {{500, 0, 8, .check_checksum = true, .max_counter = 15U, .expected_timestep = 20000U}, { 0 }, { 0 }}},
+//  {.msg = {{308, 0, 8, .check_checksum = false, .max_counter = 15U,  .expected_timestep = 20000U}, { 0 }, { 0 }}},
+//  {.msg = {{320, 0, 8, .check_checksum = true, .max_counter = 15U,  .expected_timestep = 20000U}, { 0 }, { 0 }}},
+//};
+//#define CHRYSLER_ADDR_CHECK_LEN (sizeof(chrysler_addr_checks) / sizeof(chrysler_addr_checks[0]))
 
 RxCheck chrysler_rx_checks[] = {
   {.msg = {{CHRYSLER_ADDRS.EPS_2, 0, 8, .check_checksum = true, .max_counter = 15U, .frequency = 100U}, { 0 }, { 0 }}},

@@ -439,6 +439,7 @@ struct CarParams {
 
   minEnableSpeed @7 :Float32;
   minSteerSpeed @8 :Float32;
+  enablehybridEcu @73 :Bool; #hydrid ecu
   safetyConfigs @62 :List(SafetyConfig);
   alternativeExperience @65 :Int16;      # panda flag for features like no disengage on gas
 

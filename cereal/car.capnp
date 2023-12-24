@@ -193,6 +193,8 @@ struct CarState {
   espDisabled @32 :Bool;
   accFaulted @42 :Bool;
   carFaultedNonCritical @47 :Bool;  # some ECU is faulted, but car remains controllable
+  hightorqUnavailable @48 :Bool;
+  accgasOverride @49 :Bool;
 
   # cruise state
   cruiseState @10 :CruiseState;

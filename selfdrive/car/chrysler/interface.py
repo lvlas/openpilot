@@ -24,7 +24,7 @@ class CarInterface(CarInterfaceBase):
     elif candidate in RAM_DT:
       ret.safetyConfigs[0].safetyParam |= Panda.FLAG_CHRYSLER_RAM_DT
 
-    ret.minSteerSpeed = 3.8  # m/s
+    ret.minSteerSpeed = 0  # m/s
 
     ret.lateralTuning.pid.kpBP = [0., 10., 35.]
     ret.lateralTuning.pid.kpV = [0.02, 0.02, 0.02]
@@ -75,13 +75,13 @@ class CarInterface(CarInterfaceBase):
       ret.mass = 1778
       ret.wheelbase = 2.71
       ret.steerRatio = 16.7
-      CarInterfaceBase.configure_torque_tune(candidate, ret.lateralTuning)
+      #CarInterfaceBase.configure_torque_tune(candidate, ret.lateralTuning)
       #ret.steerActuatorDelay = 0.2      
 
-      #ret.lateralTuning.init('pid')
-      #ret.lateralTuning.pid.kpBP, ret.lateralTuning.pid.kiBP = [[9., 20.], [9., 20.]]
-      #ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.15, 0.30], [0.03, 0.05]]
-      #ret.lateralTuning.pid.kf = 0.00006
+      ret.lateralTuning.init('pid')
+      ret.lateralTuning.pid.kpBP, ret.lateralTuning.pid.kiBP = [[0., 3.], [0., 15.]]
+      ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.003, 0.007], [0.01, 0.02]]
+      ret.lateralTuning.pid.kf = 0.00006
 
     # Ram
     elif candidate == CAR.RAM_1500:

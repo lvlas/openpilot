@@ -18,6 +18,17 @@ const CanMsg CHRYSLER_TX_MSGS[] = {{571, 0, 3}, {658, 0, 6}, {678, 0, 8},
 //};
 //#define CHRYSLER_ADDR_CHECK_LEN (sizeof(chrysler_addr_checks) / sizeof(chrysler_addr_checks[0]))
 
+typedef struct {
+  const int EPS_2;
+  const int ESP_1;
+  const int ESP_8;
+  const int ECM_5;
+  const int DAS_3;
+  const int DAS_6;
+  const int LKAS_COMMAND;
+  const int CRUISE_BUTTONS;
+} ChryslerAddrs;
+
 // CAN messages for Chrysler/Jeep platforms
 const ChryslerAddrs CHRYSLER_ADDRS = {
   .EPS_2            = 0x220,  // EPS driver input torque

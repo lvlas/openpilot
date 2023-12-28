@@ -5,6 +5,26 @@ $Cxx.namespace("cereal");
 
 # ******* events causing controls state machine transition *******
 
+
+struct JvePilotState {
+  notifyUi @0 :Bool;
+  carState @1 :JvePilotState.CarState;
+  carControl @2 :JvePilotState.CarControl;
+
+  struct CarState {
+    accFollowDistance @0 :UInt8;
+    pedalPressedAmount @1 :Float32;
+  }
+
+  struct CarControl {
+    vTargetFuture @0 :Float32;
+    autoFollow @1 :Bool;
+    accEco @2 :UInt8;
+    lkasButtonLight @3 :Bool;
+    vMaxCruise @4 :Float32;
+  }
+}
+
 struct CarEvent @0x9b1657f34caf3ad3 {
   name @0 :EventName;
 
@@ -139,7 +159,7 @@ struct CarEvent @0x9b1657f34caf3ad3 {
     focusRecoverActiveDEPRECATED @86;
     neosUpdateRequiredDEPRECATED @88;
     modelLagWarningDEPRECATED @93;
-    startupOneplusDEPRECATED @82;
+    accBrakeHold @82; # repurposed for jvePilot
     startupFuzzyFingerprintDEPRECATED @97;
     noTargetDEPRECATED @25;
     brakeUnavailableDEPRECATED @2;
@@ -264,6 +284,8 @@ enum FollowSettings {
   struct ButtonEvent {
     pressed @0 :Bool;
     type @1 :Type;
+    pressedFrames @2: UInt32;
+
 
     enum Type {
       unknown @0;
@@ -278,12 +300,15 @@ enum FollowSettings {
       setCruise @9;
       resumeCruise @10;
       gapAdjustCruise @11;
+      followInc @12;
+      followDec @13;
+      lkasToggle @14;
     }
   }
 
   # deprecated
   errorsDEPRECATED @0 :List(CarEvent.EventName);
-  brakeLightsDEPRECATED @19 :Bool;
+  jvePilotCarState @19 :JvePilotState.CarState;  # repurposed for jvePilot
   steeringRateLimitedDEPRECATED @29 :Bool;
   canMonoTimesDEPRECATED @12: List(UInt64);
 }
@@ -424,7 +449,7 @@ struct CarControl {
 
   gasDEPRECATED @1 :Float32;
   brakeDEPRECATED @2 :Float32;
-  steeringTorqueDEPRECATED @3 :Float32;
+  jvePilotState @3 :JvePilotState; # repurposed for jvePilot
   activeDEPRECATED @7 :Bool;
   rollDEPRECATED @8 :Float32;
   pitchDEPRECATED @9 :Float32;
@@ -684,7 +709,7 @@ struct CarParams {
   enableCameraDEPRECATED @4 :Bool;
   enableApgsDEPRECATED @6 :Bool;
   steerRateCostDEPRECATED @33 :Float32;
-  isPandaBlackDEPRECATED @39 :Bool;
+  pcmCruiseSpeed @39 :Bool; # repurposed for jvePilot
   hasStockCameraDEPRECATED @57 :Bool;
   safetyParamDEPRECATED @10 :Int16;
   safetyModelDEPRECATED @9 :SafetyModel;

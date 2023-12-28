@@ -9,6 +9,19 @@ const int CHRYSLER_STANDSTILL_THRSLD = 10;  // about 1m/s
 const CanMsg CHRYSLER_TX_MSGS[] = {{571, 0, 3}, {658, 0, 6}, {678, 0, 8},
                                    {502, 0, 8}, {503, 0, 8}, {626, 0, 8}, {838, 0, 2}};  //OP long msgs to WP
 
+typedef struct {
+  const int LKAS_HEARTBIT;
+} ChryslerAddrs;
+
+// CAN messages for Chrysler/Jeep platforms
+const ChryslerAddrs CHRYSLER_ADDRS = {
+  .LKAS_HEARTBIT    = 0x2D9,  // LKAS HEARTBIT from DASM
+};
+
+const CanMsg CHRYSLER_TX_MSGS[] = {
+  {CHRYSLER_ADDRS.LKAS_HEARTBIT, 0, 5},
+};
+
 AddrCheckStruct chrysler_addr_checks[] = {
   {.msg = {{544, 0, 8, .check_checksum = true, .max_counter = 15U, .expected_timestep = 10000U}, { 0 }, { 0 }}},
   {.msg = {{514, 0, 8, .check_checksum = false, .max_counter = 0U, .expected_timestep = 10000U}, { 0 }, { 0 }}},

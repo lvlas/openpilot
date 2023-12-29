@@ -24,7 +24,7 @@ class CarInterface(CarInterfaceBase):
     elif candidate in RAM_DT:
       ret.safetyConfigs[0].safetyParam |= Panda.FLAG_CHRYSLER_RAM_DT
 
-    ret.minSteerSpeed = 3.8  # m/s
+    ret.minSteerSpeed = 0  # m/s
 
     ret.lateralTuning.pid.kpBP = [0., 10., 35.]
     ret.lateralTuning.pid.kpV = [0.02, 0.02, 0.02]

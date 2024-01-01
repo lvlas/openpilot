@@ -37,6 +37,14 @@ class CarState(CarStateBase):
     # ret.brakeLights = bool(cp.vl["ESP_1"]["BRAKE_LIGHT"])
     ret.gas = cp.vl["ACCEL_GAS_22F"]["GAS_PEDAL_POS"]
     ret.gasPressed = ret.gas > 1e-5
+    
+    self.prev_cruise_buttons = self.cruise_buttons
+    self.cruise_buttons = int(cp.vl["CRUISE_BUTTONS"]["ACC_Cancel"])
+    if not self.cruise_buttons: # ensure cancel overrides any multi-button pressed state
+      self.cruise_buttons |= int(cp.vl["CRUISE_BUTTONS"]["ACC_Accel"]) << 2
+      self.cruise_buttons |= int(cp.vl["CRUISE_BUTTONS"]["ACC_Decel"]) << 3
+      self.cruise_buttons |= int(cp.vl["CRUISE_BUTTONS"]["ACC_Resume"]) << 4
+    
 
     ret.espDisabled = (cp.vl["TRACTION_BUTTON"]["TRACTION_OFF"] == 1)
 
@@ -62,12 +70,26 @@ class CarState(CarStateBase):
     self.acc_on_button = bool(cp.vl["WHEEL_BUTTONS"]["ACC_BUTTON_ON"])
     self.reg_cc_on_button = bool(cp.vl["WHEEL_BUTTONS"]["REG_CC_BUTTON_ON"])
 
-    ret.cruiseState.enabled = bool(cp.vl["ACC_2"]["ACC_ENABLED"])  # ACC is green.
-    ret.cruiseState.available = bool(cp.vl["ACC_2"]["ACC_AVAILABLE"])
-    ret.cruiseState.speed = max(cp.vl["DASHBOARD"]["ACC_SET_SPEED_MPH"] * CV.MPH_TO_MS, SET_SPEED_MIN)
+    ###ret.cruiseState.enabled = bool(cp.vl["ACC_2"]["ACC_ENABLED"])  # ACC is green.
+    ###ret.cruiseState.available = bool(cp.vl["ACC_2"]["ACC_AVAILABLE"])
+    ###ret.cruiseState.speed = max(cp.vl["DASHBOARD"]["ACC_SET_SPEED_MPH"] * CV.MPH_TO_MS, SET_SPEED_MIN)
     # CRUISE_STATE is a three bit msg, 0 is off, 1 and 2 are Non-ACC mode, 3 and 4 are ACC mode, find if there are other states too
-    ret.cruiseState.nonAdaptive = cp.vl["DASHBOARD"]["CRUISE_STATE"] in (1, 2)
+    ###ret.cruiseState.nonAdaptive = cp.vl["DASHBOARD"]["CRUISE_STATE"] in (1, 2)
 
+    if self.CP.openpilotLongitudinalControl:
+      # These are not used for engage/disengage since openpilot keeps track of state using the buttons
+      ret.cruiseState.available = True
+      ret.cruiseState.enabled = False
+      ret.cruiseState.nonAdaptive = False
+      ret.cruiseState.standstill = False
+      ret.accFaulted = False
+    else:
+      ret.cruiseState.available = cp_cruise.vl["DAS_3"]["ACC_AVAILABLE"] == 1
+      ret.cruiseState.enabled = cp_cruise.vl["DAS_3"]["ACC_ACTIVE"] == 1
+      ret.cruiseState.nonAdaptive = cp_cruise.vl["DAS_4"]["ACC_STATE"] in (1, 2)  # 1 NormalCCOn and 2 NormalCCSet
+      ret.cruiseState.standstill = cp_cruise.vl["DAS_3"]["ACC_STANDSTILL"] == 1
+      ret.accFaulted = cp_cruise.vl["DAS_3"]["ACC_FAULTED"] != 0
+      ret.cruiseState.speed = cp_cruise.vl["DAS_4"]["ACC_SET_SPEED_KPH"] * CV.KPH_TO_MS    
 
     self.desiredExperimentalToggleStatus = False
     if cp.vl["DASHBOARD"]["CRUISE_ICON"] in (2, 8, 12):
@@ -140,6 +162,10 @@ class CarState(CarStateBase):
     ret.accgasOverride = bool(cp.vl["ACCEL_RELATED_120"]["ACC_OVERRIDE"])
     self.accbrakeFaulted = ((cp.vl["ESP_1"]["ACC_BRAKE_FAIL"]) > 0) or ((cp.vl["ACC_ERROR"]["ACC_ERROR"]) > 0)
     self.accengFaulted = (cp.vl["ACCEL_RELATED_120"]["ACC_ENG_OK"]) == 0
+
+    self.engine_torque = cp.vl["ECM_1"]["ENGINE_TORQUE"]
+    # TODO: need for vehicles other than RAM DT
+    self.transmission_gear = int(cp.vl["TCM_1"]["ACTUAL_GEAR"])    
 
     return ret
 

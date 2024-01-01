@@ -107,3 +107,43 @@ def create_op_chime(packer, chime, chime_timer, gap_timer, chimegap_time):
     "CHIME_REQ_R": 1 if (chime_timer > 0 and (gap_timer == 0 or gap_timer == chimegap_time)) else 0
   }
   return packer.make_can_msg("CHIME", 0, values)
+
+def create_acc_commands(packer, long_active, gas, brakes, starting, stopping):
+  commands = []
+
+  das_3_values = {
+    'ACC_AVAILABLE': 1,
+    'ACC_ACTIVE': long_active,
+    'ACC_DECEL_REQ': brakes < 0.0,
+    'ACC_DECEL': brakes,
+    'ENGINE_TORQUE_REQUEST_MAX': brakes >= 0.0,
+    'ENGINE_TORQUE_REQUEST': gas,
+    'ACC_STANDSTILL': stopping,
+    'ACC_GO': starting,
+    # TODO: does this improve fuel economy?
+    'DISABLE_FUEL_SHUTOFF': gas > 0.0,
+    # TODO: does this have any impact on ACC braking responsiveness?
+    'ACC_BRK_PREP': brakes < 0.0,
+    # TODO: does this have any impact on ACC braking responsiveness?
+    #'COLLISION_BRK_PREP': ?,
+  }
+  commands.append(packer.make_can_msg("DAS_3", 0, das_3_values))
+
+  das_5_values = {
+    "FCW_STATE": 0x1,
+    "FCW_DISTANCE": 0x2,
+  }
+  commands.append(packer.make_can_msg("DAS_5", 0, das_5_values))
+
+  return commands
+
+def create_acc_hud(packer, long_active, set_speed):
+  values = {
+    "SPEED_DIGITAL": 197, # TODO: rename, this is actually distance to lead, check if pacifica is same
+    "ACC_STATE": 4 if long_active else 3,
+    "ACC_SET_SPEED_KPH": round(set_speed * CV.MS_TO_KPH),
+    "ACC_SET_SPEED_MPH": round(set_speed * CV.MS_TO_MPH),
+    "ACC_DISTANCE_CONFIG_1": 0,
+    "ACC_DISTANCE_CONFIG_2": 3 if long_active else 1,
+  }
+  return packer.make_can_msg("DAS_4", 0, values)

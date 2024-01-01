@@ -5,12 +5,23 @@ from openpilot.selfdrive.car import get_safety_config
 from openpilot.selfdrive.car.chrysler.values import CAR, RAM_HD, RAM_DT, RAM_CARS, ChryslerFlags
 from openpilot.selfdrive.car.interfaces import CarInterfaceBase
 from openpilot.common.params import Params
+from openpilot.selfdrive.car import create_button_events, get_safety_config
+from openpilot.selfdrive.car.chrysler.values import CAR, RAM_HD, RAM_DT, RAM_CARS, ChryslerFlags, CruiseButtons
+
+ButtonType = car.CarState.ButtonEvent.Type
+GearShifter = car.CarState.GearShifter
+BUTTONS_DICT = {CruiseButtons.ACCEL: ButtonType.accelCruise, CruiseButtons.DECEL: ButtonType.decelCruise,
+                CruiseButtons.RESUME: ButtonType.resumeCruise, CruiseButtons.CANCEL: ButtonType.cancel}
 
 class CarInterface(CarInterfaceBase):
   @staticmethod
   def _get_params(ret, candidate, fingerprint, car_fw, experimental_long, docs):
     ret.carName = "chrysler"
     ret.dashcamOnly = candidate in RAM_HD
+
+    ret.experimentalLongitudinalAvailable = True
+    ret.openpilotLongitudinalControl = experimental_long
+    ret.pcmCruise = not ret.openpilotLongitudinalControl   
 
     # radar parsing needs some work, see https://github.com/commaai/openpilot/issues/26842
     ret.radarUnavailable = False # DBC[candidate]['radar'] is None
@@ -45,6 +56,12 @@ class CarInterface(CarInterfaceBase):
     ret.stoppingControl = True
     ret.stoppingDecelRate = 0.2
 
+    if ret.openpilotLongitudinalControl:
+      ret.safetyConfigs[0].safetyParam |= Panda.FLAG_CHRYSLER_LONG
+
+    ret.longitudinalActuatorDelayLowerBound = 0.5
+    ret.longitudinalActuatorDelayUpperBound = 0.5    
+    
     if candidate in (CAR.PACIFICA_2019_HYBRID, CAR.PACIFICA_2020, CAR.JEEP_CHEROKEE_2019):
       # TODO: allow 2019 cars to steer down to 13 m/s if already engaged.
       ret.minSteerSpeed = 17.5  if not Params().get_bool('ChryslerMangoLat') and not Params().get_bool('LkasFullRangeAvailable') else 0 # m/s 17 on the way up, 13 on the way down once engaged.
@@ -121,7 +138,12 @@ class CarInterface(CarInterfaceBase):
     # events
     events = self.create_common_events(ret, extra_gears=[car.CarState.GearShifter.low])
 
+    if self.CS.CP.openpilotLongitudinalControl:
+      ret.buttonEvents = create_button_events(self.CS.cruise_buttons, self.CS.prev_cruise_buttons, BUTTONS_DICT)
 
+    events = self.create_common_events(ret, pcm_enable=self.CS.CP.pcmCruise, extra_gears=[GearShifter.low],
+                                       enable_buttons=(ButtonType.decelCruise, ButtonType.resumeCruise, ButtonType.accelCruise))
+    
     if ret.vEgo < self.CP.minSteerSpeed and not Params().get_bool('ChryslerMangoLat') and not Params().get_bool('LkasFullRangeAvailable'):
       events.add(car.CarEvent.EventName.belowSteerSpeed)
 

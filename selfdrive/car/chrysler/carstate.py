@@ -198,6 +198,20 @@ class CarState(CarStateBase):
       ("ESC_ACC_COPY", 50),
     ]
 
+    if CP.carFingerprint in RAM_CARS:
+      messages += [
+        ("ESP_8", 50),
+        ("EPS_3", 50),
+        ("ECM_1", 100),
+        ("TCM_1", 50),
+        ("Transmission_Status", 50),
+      ]
+    else:
+      messages += [
+        ("GEAR", 50),
+        ("SPEED_1", 100),
+      ]
+
     if CP.enablehybridEcu:
       messages += [
         ("HYBRID_ECU", 1),

@@ -75,13 +75,13 @@ class CarInterface(CarInterfaceBase):
       ret.mass = 1778
       ret.wheelbase = 2.71
       ret.steerRatio = 16.7
-      #CarInterfaceBase.configure_torque_tune(candidate, ret.lateralTuning)
+      CarInterfaceBase.configure_torque_tune(candidate, ret.lateralTuning)
       #ret.steerActuatorDelay = 0.2      
 
-      ret.lateralTuning.init('pid')
-      ret.lateralTuning.pid.kpBP, ret.lateralTuning.pid.kiBP = [[0., 3.], [0., 15.]]
-      ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.003, 0.007], [0.01, 0.02]]
-      ret.lateralTuning.pid.kf = 0.00006
+      #ret.lateralTuning.init('pid')
+      #ret.lateralTuning.pid.kpBP, ret.lateralTuning.pid.kiBP = [[0., 3.], [0., 15.]]
+      #ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.003, 0.007], [0.01, 0.02]]
+      #ret.lateralTuning.pid.kf = 0.00006
 
     # Ram
     elif candidate == CAR.RAM_1500:

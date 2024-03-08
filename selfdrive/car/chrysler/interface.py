@@ -74,7 +74,7 @@ class CarInterface(CarInterfaceBase):
     elif candidate in (CAR.JEEP_CHEROKEE, CAR.JEEP_CHEROKEE_2019):
       ret.mass = 1778
       ret.wheelbase = 2.71
-      ret.steerRatio = 20#16.7
+      ret.steerRatio = 10#16.7
       #CarInterfaceBase.configure_torque_tune(candidate, ret.lateralTuning)
       #ret.steerActuatorDelay = 0.2      
 

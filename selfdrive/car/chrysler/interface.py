@@ -62,7 +62,7 @@ class CarInterface(CarInterfaceBase):
       ret.lateralTuning.pid.kpBP, ret.lateralTuning.pid.kiBP = [[0.0], [0.0]]
 #      ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.15, 0.30], [0.03, 0.05]]
       ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.003, 0.007], [0.03, 0.04]]
-      ret.lateralTuning.pid.kf = 0.00006
+      ret.lateralTuning.pid.kf = 0.00004 #6
 
     # Ram
     elif candidate == CAR.RAM_1500:

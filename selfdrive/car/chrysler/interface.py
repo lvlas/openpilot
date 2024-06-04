@@ -55,6 +55,10 @@ class CarInterface(CarInterfaceBase):
 
     # Jeep
     elif candidate in (CAR.JEEP_GRAND_CHEROKEE, CAR.JEEP_GRAND_CHEROKEE_2019):
+      ret.mass = 1778
+      ret.wheelbase = 2.71
+      ret.steerRatio = 16.7 
+      
       ret.steerActuatorDelay = 0.2
       ret.minSteerSpeed = 0
       ret.lateralTuning.init('pid')

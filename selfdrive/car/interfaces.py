@@ -25,8 +25,8 @@ GearShifter = car.CarState.GearShifter
 EventName = car.CarEvent.EventName
 
 MAX_CTRL_SPEED = (V_CRUISE_MAX + 4) * CV.KPH_TO_MS
-ACCEL_MAX = 2.0
-ACCEL_MIN = -3.5
+ACCEL_MAX if2.0
+ACCEL_MIN = -1.75
 FRICTION_THRESHOLD = 0.3
 
 TORQUE_PARAMS_PATH = os.path.join(BASEDIR, 'selfdrive/car/torque_data/params.toml')

@@ -1,4 +1,4 @@
-o#!/usr/bin/env python3
+#!/usr/bin/env python3
 from cereal import car
 from panda import Panda
 from openpilot.selfdrive.car import create_button_events, get_safety_config

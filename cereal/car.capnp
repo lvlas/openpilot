@@ -152,6 +152,7 @@ struct CarEvent @0x9b1657f34caf3ad3 {
 
 struct CarState {
   events @13 :List(CarEvent);
+    longControl @2 :Bool;
 
   # CAN health
   canValid @26 :Bool;       # invalid counter/checksums
@@ -330,6 +331,10 @@ struct RadarData @0x888ad6581cf0aacb {
 # ******* car controls @ 100hz *******
 
 struct CarControl {
+
+  axleRatio @53 :Float32; # repurposed for jvePilot
+  gearRatios @11 :List(Float32); # repurposed for jvePilot
+
   # must be true for any actuator commands to work
   enabled @0 :Bool;
   latActive @11: Bool;
@@ -705,8 +710,6 @@ struct CarParams {
   safetyModelPassiveDEPRECATED @42 :SafetyModel = silent;
   minSpeedCanDEPRECATED @51 :Float32;
   communityFeatureDEPRECATED @46: Bool;
-  startingAccelRateDEPRECATED @53 :Float32;
-  steerMaxBPDEPRECATED @11 :List(Float32);
   steerMaxVDEPRECATED @12 :List(Float32);
   gasMaxBPDEPRECATED @13 :List(Float32);
   gasMaxVDEPRECATED @14 :List(Float32);

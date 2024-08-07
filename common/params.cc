@@ -88,6 +88,8 @@ private:
 };
 
 std::unordered_map<std::string, uint32_t> keys = {
+    {"jvePilot.settings.accEco.longAccelLevel1", PERSISTENT},
+    {"jvePilot.settings.accEco.longAccelLevel2", PERSISTENT},
     {"AccessToken", CLEAR_ON_MANAGER_START | DONT_LOG},
     {"AlwaysOnDM", PERSISTENT},
     {"ApiCache_Device", PERSISTENT},

@@ -65,7 +65,9 @@ class CAR(Platforms):
   # Jeep
   JEEP_GRAND_CHEROKEE = ChryslerPlatformConfig(  # includes 2017 Trailhawk
     [ChryslerCarDocs("Jeep Grand Cherokee 2016-18", video_link="https://www.youtube.com/watch?v=eLR9o2JkuRk")],
-    ChryslerCarSpecs(mass=1778., wheelbase=2.71, steerRatio=16.7),
+    ChryslerCarSpecs(mass=1778., wheelbase=2.71, steerRatio=16.7,
+                     gearRatios=[4.71, 3.14, 2.10, 1.67, 1.29, 1.00, 0.84, 0.67],
+                     axleRatio=3.45)
   )
 
   JEEP_GRAND_CHEROKEE_2019 = ChryslerPlatformConfig(  # includes 2020 Trailhawk
@@ -106,13 +108,18 @@ class CarControllerParams:
       self.STEER_DELTA_DOWN = 3
       self.STEER_MAX = 261  # higher than this faults the EPS
 
+    self.ACC_CONTROL_STEP = 2  # 50Hz
+
+    self.ACCEL_MIN = -3.5
+    self.ACCEL_MAX = 2.0
+    self.INACTIVE_ACCEL = 4.0
 
 STEER_THRESHOLD = 120
 
 RAM_DT = {CAR.RAM_1500_5TH_GEN, }
 RAM_HD = {CAR.RAM_HD_5TH_GEN, }
 RAM_CARS = RAM_DT | RAM_HD
-
+HYBRID_CARS = {CAR.CHRYSLER_PACIFICA_2017_HYBRID,CAR.CHRYSLER_PACIFICA_2018_HYBRID, CAR.CHRYSLER_PACIFICA_2019_HYBRID}
 
 CHRYSLER_VERSION_REQUEST = bytes([uds.SERVICE_TYPE.READ_DATA_BY_IDENTIFIER]) + \
   p16(0xf132)

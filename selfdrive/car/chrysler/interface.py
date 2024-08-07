@@ -1,16 +1,38 @@
 #!/usr/bin/env python3
 from cereal import car
 from panda import Panda
-from openpilot.selfdrive.car import create_button_events, get_safety_config
+from openpilot.selfdrive.car import get_safety_config
 from openpilot.selfdrive.car.chrysler.values import CAR, RAM_HD, RAM_DT, RAM_CARS, ChryslerFlags
 from openpilot.selfdrive.car.interfaces import CarInterfaceBase
 from openpilot.common.params import Params
+from common.cached_params import CachedParams
+cachedParams = CachedParams()
 ButtonType = car.CarState.ButtonEvent.Type
 
 ButtonType = car.CarState.ButtonEvent.Type
 
 
 class CarInterface(CarInterfaceBase):
+  ACCEL_MAX = 2.  # m/s2, high to not limit stock ACC
+  ACCEL_MIN = -3.5  # m/s2
+  @staticmethod
+  def get_pid_accel_limits(CS, CP, current_speed, cruise_speed):
+    return CarInterface.ACCEL_MIN, CarInterface.accel_max(CS)
+
+  @staticmethod
+  def accel_max(CS):
+    maxAccel = CarInterface.ACCEL_MAX
+    if CS.longControl:
+      eco = cachedParams.get_float('jvePilot.carState.accEco', 1000)
+      if eco == 1:
+        maxAccel = cachedParams.get_float('jvePilot.settings.accEco.longAccelLevel1', 1000)
+      elif eco == 2:
+        maxAccel = cachedParams.get_float('jvePilot.settings.accEco.longAccelLevel2', 1000)
+      else:
+        maxAccel = 2
+
+    return maxAccel
+  
   @staticmethod
   def _get_params(ret, candidate, fingerprint, car_fw, experimental_long, docs):
     ret.carName = "chrysler"
@@ -58,7 +80,7 @@ class CarInterface(CarInterfaceBase):
     # Jeep
     elif candidate in (CAR.JEEP_GRAND_CHEROKEE, CAR.JEEP_GRAND_CHEROKEE_2019):
       ret.steerActuatorDelay = 0.2
-
+      ret.experimentalLongitudinalAvailable = True
       ret.lateralTuning.init('pid')
       ret.lateralTuning.pid.kpBP, ret.lateralTuning.pid.kiBP = [[9., 20.], [9., 20.]]
       ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.15, 0.30], [0.03, 0.05]]

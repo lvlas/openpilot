@@ -47,7 +47,7 @@ class CarState(CarStateBase):
     ret.vEgoRaw = cp.vl["ESP_8"]["VEHICLE_SPEED_KPH"] * CV.KPH_TO_MS
     ret.vEgo, ret.aEgo = self.update_speed_kf(ret.vEgoRaw)
     ret.standstill = bool(cp.vl["ESP_8"]["STANDSTILL"])
-    self.long_accel = cp.vl["INERTIAL_SENSOR"]["LONG_ACCEL"]
+    #self.long_accel = cp.vl["INERTIAL_SENSOR"]["LONG_ACCEL"]
     ret.gearShifter = self.parse_gear_shifter(self.shifter_values.get(cp.vl["GEAR"]["PRNDL"], None))
 
     # button presses
@@ -168,7 +168,7 @@ class CarState(CarStateBase):
       ("ACCEL_GAS_22F", 50),
       ("ACCEL_RELATED_120", 50),
       ("ACC_ERROR", 0),
-      ("INERTIAL_SENSOR", 50),
+      #("INERTIAL_SENSOR", 50),
       ("ESC_ACC_COPY", 50),
     ]
 

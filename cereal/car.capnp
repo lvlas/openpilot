@@ -5,8 +5,6 @@ $Cxx.namespace("cereal");
 
 # ******* events causing controls state machine transition *******
 
-
-
 struct CarEvent @0x9b1657f34caf3ad3 {
   name @0 :EventName;
 
@@ -332,9 +330,6 @@ struct RadarData @0x888ad6581cf0aacb {
 # ******* car controls @ 100hz *******
 
 struct CarControl {
-  axleRatio @53 :Float32; # repurposed for jvePilot
-  gearRatios @11 :List(Float32); # repurposed for jvePilot
-
   # must be true for any actuator commands to work
   enabled @0 :Bool;
   latActive @11: Bool;

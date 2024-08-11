@@ -5,6 +5,24 @@ $Cxx.namespace("cereal");
 
 # ******* events causing controls state machine transition *******
 
+struct JvePilotState {
+  carState @0 :JvePilotState.CarState;
+  carControl @1 :JvePilotState.CarControl;
+
+  struct CarState {
+    accFollowDistance @0 :UInt8;
+    pedalPressedAmount @1 :Float32;
+    longControl @2 :Bool;
+  }
+
+  struct CarControl {
+    autoFollow @0 :Bool;
+    accEco @1 :UInt8;
+    vMaxCruise @2 :Float32;
+    aolcAvailable @3 :Bool;
+  }
+}
+
 struct CarEvent @0x9b1657f34caf3ad3 {
   name @0 :EventName;
 
@@ -151,8 +169,6 @@ struct CarEvent @0x9b1657f34caf3ad3 {
 # all speeds in m/s
 
 struct CarState {
-  longControl @2 :Bool;
-
   events @13 :List(CarEvent);
 
   # CAN health

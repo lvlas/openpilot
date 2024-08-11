@@ -4,6 +4,7 @@ $Cxx.namespace("cereal");
 @0x8e2af1e708af8b8d;
 
 # ******* events causing controls state machine transition *******
+# ZKOUSKA
 
 struct CarEvent @0x9b1657f34caf3ad3 {
   name @0 :EventName;

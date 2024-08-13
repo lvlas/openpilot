@@ -134,6 +134,7 @@ struct CarEvent @0x9b1657f34caf3ad3 {
     paramsdTemporaryError @50;
     paramsdPermanentError @119;
     actuatorsApiUnavailable @120;
+    hightorqsteerUnavailable @ 121;
 
     radarCanErrorDEPRECATED @15;
     communityFeatureDisallowedDEPRECATED @62;
@@ -155,6 +156,7 @@ struct CarEvent @0x9b1657f34caf3ad3 {
     focusRecoverActiveDEPRECATED @86;
     neosUpdateRequiredDEPRECATED @88;
     modelLagWarningDEPRECATED @93;
+    startupOneplusDEPRECATED @82;
     lkasUserDisabled @82; # repurposed for jvePilot
     startupFuzzyFingerprintDEPRECATED @97;
     noTargetDEPRECATED @25;
@@ -210,6 +212,7 @@ struct CarState {
   stockAeb @30 :Bool;
   stockFcw @31 :Bool;
   espDisabled @32 :Bool;
+  hightorqUnavailable @51 :Bool;
   accFaulted @42 :Bool;
   carFaultedNonCritical @47 :Bool;  # some ECU is faulted, but car remains controllable
 
@@ -258,8 +261,15 @@ struct CarState {
     speedOffset @3 :Float32;
     standstill @4 :Bool;
     nonAdaptive @5 :Bool;
+    followSettings @7 :FollowSettings;
   }
 
+enum FollowSettings {
+    near @0;
+    mid @1;
+    far @2;
+    experimental @3; #this switches to E2E long
+  }
   enum GearShifter {
     unknown @0;
     park @1;
@@ -300,6 +310,7 @@ struct CarState {
 
   # deprecated
   errorsDEPRECATED @0 :List(CarEvent.EventName);
+  brakeLightsDEPRECATED @19 :Bool;
   jvePilotCarState @19 :JvePilotState.CarState;  # repurposed for jvePilot
   steeringRateLimitedDEPRECATED @29 :Bool;
   canMonoTimesDEPRECATED @12: List(UInt64);
@@ -407,6 +418,8 @@ struct CarControl {
     rightLaneDepart @8: Bool;
     leftLaneDepart @9: Bool;
     leadDistanceBars @10: Int8;  # 1-3: 1 is closest, 3 is farthest. some ports may utilize 2-4 bars instead
+    leadDistance @11: Float32;
+    leadvRel @12: Float32;
 
     enum VisualAlert {
       # these are the choices from the Honda
@@ -439,6 +452,7 @@ struct CarControl {
 
   gasDEPRECATED @1 :Float32;
   brakeDEPRECATED @2 :Float32;
+  steeringTorqueDEPRECATED @3 :Float32;
   jvePilotState @3 :JvePilotState; # repurposed for jvePilot
   activeDEPRECATED @7 :Bool;
   rollDEPRECATED @8 :Float32;
@@ -466,6 +480,7 @@ struct CarParams {
   enableBsm @56 :Bool;       # blind spot monitoring
   flags @64 :UInt32;         # flags for car specific quirks
   experimentalLongitudinalAvailable @71 :Bool;
+  enablehybridEcu @74 :Bool; #hydrid ecu
 
   minEnableSpeed @7 :Float32;
   minSteerSpeed @8 :Float32;
@@ -564,8 +579,8 @@ struct CarParams {
     kiBP @2 :List(Float32);
     kiV @3 :List(Float32);
     kf @6 :Float32;
-    deadzoneBP @4 :List(Float32);
-    deadzoneV @5 :List(Float32);
+    deadzoneBPDEPRECATED @4 :List(Float32);
+    deadzoneVDEPRECATED @5 :List(Float32);
   }
 
   struct LateralINDITuning {
@@ -709,6 +724,7 @@ struct CarParams {
   enableCameraDEPRECATED @4 :Bool;
   enableApgsDEPRECATED @6 :Bool;
   steerRateCostDEPRECATED @33 :Float32;
+  isPandaBlackDEPRECATED @39 :Bool;
   pcmCruiseSpeed @39 :Bool; # repurposed for jvePilot
   hasStockCameraDEPRECATED @57 :Bool;
   safetyParamDEPRECATED @10 :Int16;
@@ -716,6 +732,8 @@ struct CarParams {
   safetyModelPassiveDEPRECATED @42 :SafetyModel = silent;
   minSpeedCanDEPRECATED @51 :Float32;
   communityFeatureDEPRECATED @46: Bool;
+  startingAccelRateDEPRECATED @53 :Float32;
+  steerMaxBPDEPRECATED @11 :List(Float32);
   axleRatio @53 :Float32; # repurposed for jvePilot
   gearRatios @11 :List(Float32); # repurposed for jvePilot
   steerMaxVDEPRECATED @12 :List(Float32);
@@ -725,4 +743,5 @@ struct CarParams {
   brakeMaxVDEPRECATED @16 :List(Float32);
   directAccelControlDEPRECATED @30 :Bool;
   maxSteeringAngleDegDEPRECATED @54 :Float32;
+  longitudinalActuatorDelayLowerBoundDEPRECATEDDEPRECATED @61 :Float32;
 }

@@ -5,6 +5,24 @@ $Cxx.namespace("cereal");
 
 # ******* events causing controls state machine transition *******
 
+struct JvePilotState {
+  carState @0 :JvePilotState.CarState;
+  carControl @1 :JvePilotState.CarControl;
+
+  struct CarState {
+    accFollowDistance @0 :UInt8;
+    pedalPressedAmount @1 :Float32;
+    longControl @2 :Bool;
+  }
+
+  struct CarControl {
+    autoFollow @0 :Bool;
+    accEco @1 :UInt8;
+    vMaxCruise @2 :Float32;
+    aolcAvailable @3 :Bool;
+  }
+}
+
 struct CarEvent @0x9b1657f34caf3ad3 {
   name @0 :EventName;
 
@@ -138,7 +156,7 @@ struct CarEvent @0x9b1657f34caf3ad3 {
     focusRecoverActiveDEPRECATED @86;
     neosUpdateRequiredDEPRECATED @88;
     modelLagWarningDEPRECATED @93;
-    startupOneplusDEPRECATED @82;
+    lkasUserDisabled @82; # repurposed for jvePilot
     startupFuzzyFingerprintDEPRECATED @97;
     noTargetDEPRECATED @25;
     brakeUnavailableDEPRECATED @2;
@@ -268,6 +286,7 @@ enum FollowSettings {
   struct ButtonEvent {
     pressed @0 :Bool;
     type @1 :Type;
+    pressedFrames @2: UInt32;
 
     enum Type {
       unknown @0;
@@ -282,12 +301,15 @@ enum FollowSettings {
       setCruise @9;
       resumeCruise @10;
       gapAdjustCruise @11;
+      followInc @12;
+      followDec @13;
+      lkasToggle @14;
     }
   }
 
   # deprecated
   errorsDEPRECATED @0 :List(CarEvent.EventName);
-  brakeLightsDEPRECATED @19 :Bool;
+  jvePilotCarState @19 :JvePilotState.CarState;  # repurposed for jvePilot
   steeringRateLimitedDEPRECATED @29 :Bool;
   canMonoTimesDEPRECATED @12: List(UInt64);
   canRcvTimeoutDEPRECATED @49 :Bool;
@@ -394,8 +416,6 @@ struct CarControl {
     rightLaneDepart @8: Bool;
     leftLaneDepart @9: Bool;
     leadDistanceBars @10: Int8;  # 1-3: 1 is closest, 3 is farthest. some ports may utilize 2-4 bars instead
-    leadDistance @11: Float32;
-    leadvRel @12: Float32;
 
     enum VisualAlert {
       # these are the choices from the Honda
@@ -428,7 +448,7 @@ struct CarControl {
 
   gasDEPRECATED @1 :Float32;
   brakeDEPRECATED @2 :Float32;
-  steeringTorqueDEPRECATED @3 :Float32;
+  jvePilotState @3 :JvePilotState; # repurposed for jvePilot
   activeDEPRECATED @7 :Bool;
   rollDEPRECATED @8 :Float32;
   pitchDEPRECATED @9 :Float32;
@@ -455,7 +475,6 @@ struct CarParams {
   enableBsm @56 :Bool;       # blind spot monitoring
   flags @64 :UInt32;         # flags for car specific quirks
   experimentalLongitudinalAvailable @71 :Bool;
-  enablehybridEcu @74 :Bool; #hydrid ecu
 
   minEnableSpeed @7 :Float32;
   minSteerSpeed @8 :Float32;
@@ -502,7 +521,8 @@ struct CarParams {
   startingState @70 :Bool; # Does this car make use of special starting state
 
   steerActuatorDelay @36 :Float32; # Steering wheel actuator delay in seconds
-  longitudinalActuatorDelay @58 :Float32; # Gas/Brake actuator delay in seconds
+  longitudinalActuatorDelayLowerBound @61 :Float32; # Gas/Brake actuator delay in seconds, lower bound
+  longitudinalActuatorDelayUpperBound @58 :Float32; # Gas/Brake actuator delay in seconds, upper bound
   openpilotLongitudinalControl @37 :Bool; # is openpilot doing the longitudinal control?
   carVin @38 :Text; # VIN number queried during fingerprinting
   dashcamOnly @41: Bool;
@@ -553,8 +573,8 @@ struct CarParams {
     kiBP @2 :List(Float32);
     kiV @3 :List(Float32);
     kf @6 :Float32;
-    deadzoneBPDEPRECATED @4 :List(Float32);
-    deadzoneVDEPRECATED @5 :List(Float32);
+    deadzoneBP @4 :List(Float32);
+    deadzoneV @5 :List(Float32);
   }
 
   struct LateralINDITuning {
@@ -698,7 +718,7 @@ struct CarParams {
   enableCameraDEPRECATED @4 :Bool;
   enableApgsDEPRECATED @6 :Bool;
   steerRateCostDEPRECATED @33 :Float32;
-  isPandaBlackDEPRECATED @39 :Bool;
+  pcmCruiseSpeed @39 :Bool; # repurposed for jvePilot
   hasStockCameraDEPRECATED @57 :Bool;
   safetyParamDEPRECATED @10 :Int16;
   safetyModelDEPRECATED @9 :SafetyModel;
@@ -706,7 +726,8 @@ struct CarParams {
   minSpeedCanDEPRECATED @51 :Float32;
   communityFeatureDEPRECATED @46: Bool;
   startingAccelRateDEPRECATED @53 :Float32;
-  steerMaxBPDEPRECATED @11 :List(Float32);
+  axleRatio @53 :Float32; # repurposed for jvePilot
+  gearRatios @11 :List(Float32); # repurposed for jvePilot
   steerMaxVDEPRECATED @12 :List(Float32);
   gasMaxBPDEPRECATED @13 :List(Float32);
   gasMaxVDEPRECATED @14 :List(Float32);

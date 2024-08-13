@@ -4,7 +4,6 @@ $Cxx.namespace("cereal");
 @0x8e2af1e708af8b8d;
 
 # ******* events causing controls state machine transition *******
-# ZKOUSKA
 
 struct CarEvent @0x9b1657f34caf3ad3 {
   name @0 :EventName;
@@ -706,6 +705,8 @@ struct CarParams {
   safetyModelPassiveDEPRECATED @42 :SafetyModel = silent;
   minSpeedCanDEPRECATED @51 :Float32;
   communityFeatureDEPRECATED @46: Bool;
+  startingAccelRateDEPRECATED @53 :Float32;
+  steerMaxBPDEPRECATED @11 :List(Float32);
   steerMaxVDEPRECATED @12 :List(Float32);
   gasMaxBPDEPRECATED @13 :List(Float32);
   gasMaxVDEPRECATED @14 :List(Float32);

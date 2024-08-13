@@ -466,8 +466,7 @@ struct CarParams {
   carFingerprint @1 :Text;
   fuzzyFingerprint @55 :Bool;
 
-  axleRatio2 @53 :Float32; 
-  gearRatios2 @11 :List(Float32); 
+
 
   notCar @66 :Bool;  # flag for non-car robotics platforms
 

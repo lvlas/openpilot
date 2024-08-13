@@ -466,6 +466,9 @@ struct CarParams {
   carFingerprint @1 :Text;
   fuzzyFingerprint @55 :Bool;
 
+  axleRatio @53 :Float32; 
+  gearRatios @11 :List(Float32); 
+
   notCar @66 :Bool;  # flag for non-car robotics platforms
 
   pcmCruise @3 :Bool;        # is openpilot's state tied to the PCM's cruise state?
@@ -725,8 +728,6 @@ struct CarParams {
   communityFeatureDEPRECATED @46: Bool;
   startingAccelRateDEPRECATED @53 :Float32;
   steerMaxBPDEPRECATED @11 :List(Float32);
-  axleRatio @53 :Float32; # repurposed for jvePilot
-  gearRatios @11 :List(Float32); # repurposed for jvePilot
   steerMaxVDEPRECATED @12 :List(Float32);
   gasMaxBPDEPRECATED @13 :List(Float32);
   gasMaxVDEPRECATED @14 :List(Float32);

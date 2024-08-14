@@ -1,4 +1,3 @@
-@@ -0,0 +1,44 @@
 from cereal import car
 from common.params import Params
 from openpilot.selfdrive.car import button_pressed

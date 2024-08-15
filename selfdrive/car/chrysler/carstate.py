@@ -4,8 +4,9 @@ from opendbc.can.parser import CANParser
 from opendbc.can.can_define import CANDefine
 from openpilot.selfdrive.car.chrysler.chryslerlonghelper import SET_SPEED_MIN
 from openpilot.selfdrive.car.interfaces import CarStateBase
-from openpilot.selfdrive.car.chrysler.values import DBC, STEER_THRESHOLD, RAM_CARS
+from openpilot.selfdrive.car.chrysler.values import DBC, STEER_THRESHOLD, HYBRID_CARS, RAM_CARS
 from openpilot.common.params import Params
+from common.cached_params import CachedParams
 
 
 class CarState(CarStateBase):
@@ -20,6 +21,22 @@ class CarState(CarStateBase):
     self.acc_on_button = False
     self.veh_on_timer = 0
     self.axle_torq = 0
+
+    # long control
+    self.longControl = False
+    self.cachedParams = CachedParams()
+    self.das_3 = None
+    self.das_5 = None
+    self.longEnabled = False
+    self.longControl = False
+    self.gasRpm = None
+    self.allowLong = True # CP.carFingerprint in (CAR.JEEP_CHEROKEE, CAR.JEEP_CHEROKEE_2019)
+    self.torqMin = None
+    self.torqMax = None
+    self.wheelTorqMin = None
+    self.wheelTorqMax = None
+    self.transmission_gear = None
+    self.engine_torque = None  
 
   def update(self, cp, cp_cam):
 
@@ -62,13 +79,46 @@ class CarState(CarStateBase):
     self.acc_on_button = bool(cp.vl["WHEEL_BUTTONS"]["ACC_BUTTON_ON"])
     self.reg_cc_on_button = bool(cp.vl["WHEEL_BUTTONS"]["REG_CC_BUTTON_ON"])
 
-    ret.cruiseState.enabled = bool(cp.vl["ACC_2"]["ACC_ENABLED"])  # ACC is green.
-    ret.cruiseState.available = bool(cp.vl["ACC_2"]["ACC_AVAILABLE"])
-    ret.cruiseState.speed = max(cp.vl["DASHBOARD"]["ACC_SET_SPEED_MPH"] * CV.MPH_TO_MS, SET_SPEED_MIN)
+    # ret.cruiseState.enabled = bool(cp.vl["ACC_2"]["ACC_ENABLED"])  # ACC is green.
+    # ret.cruiseState.available = bool(cp.vl["ACC_2"]["ACC_AVAILABLE"])
+    # ret.cruiseState.speed = max(cp.vl["DASHBOARD"]["ACC_SET_SPEED_MPH"] * CV.MPH_TO_MS, SET_SPEED_MIN)
     # CRUISE_STATE is a three bit msg, 0 is off, 1 and 2 are Non-ACC mode, 3 and 4 are ACC mode, find if there are other states too
-    ret.cruiseState.nonAdaptive = cp.vl["DASHBOARD"]["CRUISE_STATE"] in (1, 2)
+    # ret.cruiseState.nonAdaptive = cp.vl["DASHBOARD"]["CRUISE_STATE"] in (1, 2)
 
 
+
+    self.longControl = (self.CP.experimentalLongitudinalAvailable and cp.vl["DAS_4"]["ACC_STATE"] == 0
+                        and self.cachedParams.get_bool('ExperimentalLongitudinalEnabled', 1000))
+    if self.longControl:
+      ret.jvePilotCarState.longControl = True
+      ret.cruiseState.enabled = self.longEnabled
+      ret.cruiseState.available = True
+      ret.cruiseState.nonAdaptive = False
+      ret.cruiseState.standstill = False
+      ret.accFaulted = False
+      self.torqMin = cp.vl["DAS_3"]["ENGINE_TORQUE_REQUEST"]
+      self.torqMax = cp.vl["ECM_TRQ"]["ENGINE_TORQ_MAX"]
+      self.transmission_gear = int(cp.vl['TCM_A7']["CurrentGear"])
+      self.gasRpm = cp.vl["ECM_1"]["ENGINE_RPM"]
+      self.engine_torque = cp.vl["ECM_1"]["ENGINE_TORQUE"]
+      if self.CP.carFingerprint in HYBRID_CARS:
+        self.wheelTorqMin = cp.vl["AXLE_TORQ"]["AXLE_TORQ_MIN"]
+        self.wheelTorqMax = cp.vl["AXLE_TORQ"]["AXLE_TORQ_MAX"]
+    else:
+      self.longEnabled = False
+      ret.jvePilotCarState.longControl = False
+      ret.cruiseState.available = cp_cruise.vl["DAS_3"]["ACC_AVAILABLE"] == 1
+      ret.cruiseState.enabled = cp_cruise.vl["DAS_3"]["ACC_ACTIVE"] == 1
+      ret.cruiseState.speed = cp_cruise.vl["DAS_4"]["ACC_SET_SPEED_KPH"] * CV.KPH_TO_MS
+      ret.cruiseState.nonAdaptive = cp_cruise.vl["DAS_4"]["ACC_STATE"] in (1, 2)  # 1 NormalCCOn and 2 NormalCCSet
+      ret.cruiseState.standstill = cp_cruise.vl["DAS_3"]["ACC_STANDSTILL"] == 1
+      ret.accFaulted = cp_cruise.vl["DAS_3"]["ACC_FAULTED"] != 0
+
+    self.das_3 = cp.vl['DAS_3']
+    self.das_5 = cp.vl['DAS_5']
+
+
+    
     self.desiredExperimentalToggleStatus = False
     if cp.vl["DASHBOARD"]["CRUISE_ICON"] in (2, 8, 12):
       ret.cruiseState.followSettings = 1
@@ -144,6 +194,23 @@ class CarState(CarStateBase):
     return ret
 
   @staticmethod
+  def get_cruise_messages():
+    messages = [
+      ("DAS_3", 50),
+      ("DAS_4", 50),
+      ("DAS_5", 50),
+    ]
+    return messages
+
+  @staticmethod
+  def get_hybrid_messages():
+    messages = [
+      ("AXLE_TORQ", 50),
+    ]
+    return messages
+
+  
+  @staticmethod
   def get_can_parser(CP):
 
 
@@ -151,9 +218,9 @@ class CarState(CarStateBase):
       # sig_address, frequency
       ("ESP_1", 50),
       ("EPS_2", 100),
-      ("SPEED_1", 100),
+      # ("SPEED_1", 100),
       ("ESP_6", 50),
-      ("STEERING", 100),
+      ("STEERING", 50),
       ("ACC_2", 50),
       ("GEAR", 50),
       ("ACCEL_GAS_134", 50),
@@ -170,6 +237,9 @@ class CarState(CarStateBase):
       ("ACC_ERROR", 0),
       #("INERTIAL_SENSOR", 50),
       ("ESC_ACC_COPY", 50),
+      ("ECM_1", 50),
+      ("ECM_TRQ", 50),
+      ("TCM_A7", 50),      
     ]
 
     if CP.enablehybridEcu:
@@ -181,6 +251,10 @@ class CarState(CarStateBase):
 
     if CP.enableBsm:
       messages.append(("BLIND_SPOT_WARNINGS", 2))
+
+
+    if CP.carFingerprint in HYBRID_CARS:
+      messages += CarState.get_hybrid_messages()    
 
     return CANParser(DBC[CP.carFingerprint]["pt"], messages, 0)
 

@@ -724,6 +724,8 @@ struct CarParams {
   safetyModelDEPRECATED @9 :SafetyModel;
   safetyModelPassiveDEPRECATED @42 :SafetyModel = silent;
   minSpeedCanDEPRECATED @51 :Float32;
+  axleRatio @53 :Float32;
+  gearRatios @11 :List(Float32);
   communityFeatureDEPRECATED @46: Bool;
   startingAccelRateDEPRECATED @53 :Float32;
   steerMaxBPDEPRECATED @11 :List(Float32);

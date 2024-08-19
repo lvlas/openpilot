@@ -224,9 +224,7 @@ class CarSpecs:
   centerToFrontRatio: float = 0.5
   minSteerSpeed: float = 0.0  # m/s
   minEnableSpeed: float = -1.0  # m/s
-  tireStiffnessFactor: float = 1.0
-  gearRatios: list = list[float]
-  axleRatio: float = 0.0  
+  tireStiffnessFactor: float = 1.0  
 
   def override(self, **kwargs):
     return replace(self, **kwargs)

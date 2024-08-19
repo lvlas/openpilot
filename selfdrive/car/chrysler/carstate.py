@@ -221,7 +221,7 @@ class CarState(CarStateBase):
       # ("SPEED_1", 100),
       ("ESP_6", 50),
       ("STEERING", 50),
-      ("ACC_2", 50),
+      #("ACC_2", 50),
       ("GEAR", 50),
       ("ACCEL_GAS_134", 50),
       ("DASHBOARD", 15),

@@ -50,7 +50,7 @@ class LongCarControllerV1(LongCarController):
     self.vehicleMass = CP.mass
     self.max_gear = None
 
-    self.finalDriveRatios = [x * CP.axleRatio for x in CP.gearRatios]
+    self.finalDriveRatios = [x * 3.45 for x in [4.71, 3.14, 2.10, 1.67, 1.29, 1.00, 0.84, 0.67]]
 
   def torqRange(self, CS):
     return CS.wheelTorqMin if self.hybrid else CS.torqMin, CS.wheelTorqMax if self.hybrid else CS.torqMax

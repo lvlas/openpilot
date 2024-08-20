@@ -120,11 +120,11 @@ class CarState(CarStateBase):
 
     
     self.desiredExperimentalToggleStatus = False
-    if cp.vl["DASHBOARD"]["CRUISE_ICON"] in (2, 8, 12):
+    if cp.vl["DAS_4"]["CRUISE_ICON"] in (2, 8, 12):
       ret.cruiseState.followSettings = 1
-    elif cp.vl["DASHBOARD"]["CRUISE_ICON"] in (3, 9, 13):
+    elif cp.vl["DAS_4"]["CRUISE_ICON"] in (3, 9, 13):
       ret.cruiseState.followSettings = 2
-    elif cp.vl["DASHBOARD"]["CRUISE_ICON"] in (4, 10, 14):
+    elif cp.vl["DAS_4"]["CRUISE_ICON"] in (4, 10, 14):
       ret.cruiseState.followSettings = 3
     else:
       ret.cruiseState.followSettings = 4
@@ -171,8 +171,8 @@ class CarState(CarStateBase):
       self.axle_torq_max = 300.
       self.hybrid_power_meter = 1
 
-    self.acc_hold = bool(cp.vl["ACC_2"]["ACC_STOP"])
-    self.lead_dist = cp.vl["DASHBOARD"]["LEAD_DIST"]
+    self.acc_hold = bool(cp.vl["DAS_3"]["ACC_STANDSTILL"])
+    self.lead_dist = cp.vl["DAS_4"]["SPEED_DIGITAL"]
     self.wheel_button_counter = cp.vl["WHEEL_BUTTONS"]["COUNTER"]
 
     self.tcs_active = bool(cp.vl["ESC_ACC_COPY"]["TCS_ACTIVE"])
@@ -224,7 +224,7 @@ class CarState(CarStateBase):
       #("ACC_2", 50),
       ("GEAR", 50),
       ("ACCEL_GAS_134", 50),
-      ("DASHBOARD", 15),
+      #("DASHBOARD", 15),
       ("STEERING_LEVERS", 10),
       ("ORC_1", 2),
       ("BCM_1", 1),

@@ -151,6 +151,8 @@ BO_ 501 DAS_4: 8 XXX
  SG_ ACC_FAULTED : 50|1@0+ (1,0) [0|1] "" XXX
  SG_ ACC_ENABLED : 43|1@0+ (1,0) [0|1] "" XXX
  SG_ LEAD_VEHICLE : 42|1@0+ (1,0) [0|1] "" XXX
+ SG_ CRUISE_ICON : 45|6@0+ (1,0) [0|64] "" XXX
+ //SG_ LEAD_DIST : 63|8@0+ (1,0) [0|255] "" XXX
 
 BO_ 544 EPS_2: 8 XXX
  SG_ APA_STEER_FAULT : 50|1@0+ (1,0) [0|1] "" XXX

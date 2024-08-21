@@ -99,8 +99,8 @@ class CarState(CarStateBase):
       self.torqMin = cp.vl["DAS_3"]["ENGINE_TORQUE_REQUEST"]
       self.torqMax = cp.vl["ECM_TRQ"]["ENGINE_TORQ_MAX"]
       self.transmission_gear = int(cp.vl['TCM_A7']["CurrentGear"])
-      self.gasRpm = cp.vl["ECM_1"]["ENGINE_RPM"]
-      self.engine_torque = cp.vl["ECM_1"]["ENGINE_TORQUE"]
+      self.gasRpm = cp.vl["ENGINE_RPM_HEV"]["ENGINE_RPM"]
+      self.engine_torque = cp.vl["ENGINE_RPM_HEV"]["ENGINE_TORQUE"]
       if self.CP.carFingerprint in HYBRID_CARS:
         self.wheelTorqMin = cp.vl["AXLE_TORQ"]["AXLE_TORQ_MIN"]
         self.wheelTorqMax = cp.vl["AXLE_TORQ"]["AXLE_TORQ_MAX"]

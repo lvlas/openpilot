@@ -87,8 +87,8 @@ class CarState(CarStateBase):
 
 
 
-    self.longControl = (self.CP.experimentalLongitudinalAvailable and cp.vl["DAS_4"]["ACC_STATE"] == 0
-                        and self.cachedParams.get_bool('ExperimentalLongitudinalEnabled', 1000))
+    self.longControl = True #(self.CP.experimentalLongitudinalAvailable and cp.vl["DAS_4"]["ACC_STATE"] == 0
+                        #and self.cachedParams.get_bool('ExperimentalLongitudinalEnabled', 1000))
     if self.longControl:
       ret.jvePilotCarState.longControl = True
       ret.cruiseState.enabled = self.longEnabled

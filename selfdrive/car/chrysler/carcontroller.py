@@ -14,7 +14,7 @@ from openpilot.common.numpy_fast import clip
 from openpilot.selfdrive.car.chrysler.chryslerlonghelper import cluster_chime, accel_hysteresis, accel_rate_limit, \
   cruiseiconlogic, setspeedlogic, SET_SPEED_MIN, DEFAULT_DECEL, STOP_GAS_THRESHOLD, START_BRAKE_THRESHOLD, \
   STOP_BRAKE_THRESHOLD, START_GAS_THRESHOLD, CHIME_GAP_TIME, ACCEL_SCALE, ACCEL_MIN, ACCEL_MAX
-from openpilot.selfdrive.car.chrysler.values import CAR, CarControllerParams, ChryslerFlags
+from openpilot.selfdrive.car.chrysler.values import CAR, RAM_CARS, CarControllerParams, ChryslerFlags
 from openpilot.selfdrive.car.interfaces import CarControllerBase
 
 LongCtrlState = car.CarControl.Actuators.LongControlState

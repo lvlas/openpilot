@@ -305,6 +305,7 @@ enum FollowSettings {
 
   # deprecated
   errorsDEPRECATED @0 :List(CarEvent.EventName);
+  jvePilotCarState @19 :JvePilotState.CarState;  # repurposed for jvePilot
   brakeLightsDEPRECATED @19 :Bool;
   steeringRateLimitedDEPRECATED @29 :Bool;
   canMonoTimesDEPRECATED @12: List(UInt64);

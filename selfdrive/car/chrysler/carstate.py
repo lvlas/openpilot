@@ -115,7 +115,7 @@ class CarState(CarStateBase):
       ret.accFaulted = cp_cruise.vl["DAS_3"]["ACC_FAULTED"] != 0
 
     self.das_3 = cp.vl['DAS_3']
-    self.das_5 = cp.vl['DAS_5']
+    self.das_5 = cp.vl['ACC_1']
 
 
     
@@ -198,7 +198,7 @@ class CarState(CarStateBase):
     messages = [
       ("DAS_3", 50),
       ("DAS_4", 50),
-      ("DAS_5", 50),
+      ("ACC_1", 50),
     ]
     return messages
 

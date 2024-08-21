@@ -237,7 +237,7 @@ class CarState(CarStateBase):
       ("ACC_ERROR", 0),
       #("INERTIAL_SENSOR", 50),
       ("ESC_ACC_COPY", 50),
-      ("ECM_1", 50),
+      ("ENGINE_RPM_HEV", 50),
       ("ECM_TRQ", 50),
       ("TCM_A7", 50),      
     ]

@@ -1,5 +1,5 @@
 from numpy import interp
-from cereal import car
+from cereal import car, messaging
 from openpilot.selfdrive.car.chrysler.chryslercan import create_lkas_hud, create_lkas_command, \
   create_wheel_buttons, create_mango_hud, create_op_acc_1, create_op_acc_2, create_op_dashboard, create_op_chime
 from opendbc.can.packer import CANPacker

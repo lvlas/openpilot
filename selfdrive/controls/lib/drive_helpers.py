@@ -67,15 +67,26 @@ class VCruiseHelper:
       self.v_cruise_cluster_kph = V_CRUISE_INITIAL
 
   #def _update_v_cruise_non_pcm(self, CS, enabled, is_metric, reverse_acc_button_change):
+  #def _update_v_cruise_non_pcm(self, CS, enabled, is_metric):    
+  #  v_cruise_min = cruise_min(is_metric)
+  #  if enabled:
+  #    for b in CS.buttonEvents:
+  #      short_press = not b.pressed and b.pressedFrames < 30
+  #      long_press = b.pressed and b.pressedFrames == 30 \
+  #                   #or ((not reverse_acc_button_change) and b.pressedFrames % 50 == 0 and b.pressedFrames > 50)
+  #                   or (b.pressedFrames % 50 == 0 and b.pressedFrames > 50)        
+
   def _update_v_cruise_non_pcm(self, CS, enabled, is_metric):    
     v_cruise_min = cruise_min(is_metric)
     if enabled:
-      for b in CS.buttonEvents:
-        short_press = not b.pressed and b.pressedFrames < 30
-        long_press = b.pressed and b.pressedFrames == 30 \
-                     #or ((not reverse_acc_button_change) and b.pressedFrames % 50 == 0 and b.pressedFrames > 50)
-                     or (b.pressedFrames % 50 == 0 and b.pressedFrames > 50)        
+        for b in CS.buttonEvents:
+            short_press = not b.pressed and b.pressedFrames < 30
+            long_press = (
+                b.pressed and b.pressedFrames == 30
+                or (b.pressedFrames % 50 == 0 and b.pressedFrames > 50)
+            )
 
+        
         #if reverse_acc_button_change:
         #  sp = short_press
         #  short_press = long_press

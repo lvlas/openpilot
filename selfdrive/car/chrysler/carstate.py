@@ -215,7 +215,7 @@ class CarState(CarStateBase):
 
 
     messages = [
-      # sig_address, frequency
+      # sig_address, frequency das4 a das3 tu nebylo
       ("ESP_1", 50),
       ("EPS_2", 100),
       # ("SPEED_1", 100),
@@ -239,7 +239,9 @@ class CarState(CarStateBase):
       ("ESC_ACC_COPY", 50),
       ("ENGINE_RPM_HEV", 50),
       ("ECM_TRQ", 50),
-      ("TCM_A7", 50),      
+      ("TCM_A7", 50),  
+      ("DAS_3", 50),
+      ("DAS_4", 50),
     ]
 
     if CP.enablehybridEcu:

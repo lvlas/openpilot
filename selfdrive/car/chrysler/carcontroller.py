@@ -83,7 +83,7 @@ class CarController(CarControllerBase):
     self.long_controller = LongCarControllerV1(self.CP, self.params, self.packer)  
 
   def update(self, CC, CS, now_nanos):
-
+    can_sends = []
     self.sm.update(0)
     self.long_controller.acc(self.sm['longitudinalPlan'], self.frame, CC, CS, can_sends)
 

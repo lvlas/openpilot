@@ -242,6 +242,7 @@ class CarState(CarStateBase):
       ("TCM_A7", 50),  
       ("DAS_3", 50),
       ("DAS_4", 50),
+      ("ACC_1", 50),
     ]
 
     if CP.enablehybridEcu:

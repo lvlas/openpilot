@@ -55,7 +55,8 @@ class VCruiseHelper:
     if CS.cruiseState.available:
       if not self.CP.pcmCruise or not self.CP.pcmCruiseSpeed:
         # if stock cruise is completely disabled, then we can use our own set speed logic
-        self._update_v_cruise_non_pcm(CS, enabled, is_metric, reverse_acc_button_change)
+        #self._update_v_cruise_non_pcm(CS, enabled, is_metric, reverse_acc_button_change)
+        self._update_v_cruise_non_pcm(CS, enabled, is_metric)        
         self.v_cruise_cluster_kph = self.v_cruise_kph
         self.update_button_timers(CS)
       else:
@@ -65,18 +66,20 @@ class VCruiseHelper:
       self.v_cruise_kph = V_CRUISE_INITIAL
       self.v_cruise_cluster_kph = V_CRUISE_INITIAL
 
-  def _update_v_cruise_non_pcm(self, CS, enabled, is_metric, reverse_acc_button_change):
+  #def _update_v_cruise_non_pcm(self, CS, enabled, is_metric, reverse_acc_button_change):
+  def _update_v_cruise_non_pcm(self, CS, enabled, is_metric):    
     v_cruise_min = cruise_min(is_metric)
     if enabled:
       for b in CS.buttonEvents:
         short_press = not b.pressed and b.pressedFrames < 30
         long_press = b.pressed and b.pressedFrames == 30 \
-                     or ((not reverse_acc_button_change) and b.pressedFrames % 50 == 0 and b.pressedFrames > 50)
+                     #or ((not reverse_acc_button_change) and b.pressedFrames % 50 == 0 and b.pressedFrames > 50)
+                     or (b.pressedFrames % 50 == 0 and b.pressedFrames > 50)        
 
-        if reverse_acc_button_change:
-          sp = short_press
-          short_press = long_press
-          long_press = sp
+        #if reverse_acc_button_change:
+        #  sp = short_press
+        #  short_press = long_press
+        #  long_press = sp
 
         if long_press:
           v_cruise_delta_5 = V_CRUISE_DELTA if is_metric else V_CRUISE_DELTA_IMPERIAL

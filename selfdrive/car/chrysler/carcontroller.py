@@ -22,6 +22,7 @@ LongCtrlState = car.CarControl.Actuators.LongControlState
 class CarController(CarControllerBase):
   def __init__(self, dbc_name, CP, VM):
     self.sm = messaging.SubMaster(['longitudinalPlan'])    
+    self.frame = 0
     self.CP = CP
     self.apply_steer_last = 0
     self.ccframe = 0

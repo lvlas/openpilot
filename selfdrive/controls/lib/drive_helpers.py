@@ -49,7 +49,9 @@ class VCruiseHelper:
   def v_cruise_initialized(self):
     return self.v_cruise_kph != V_CRUISE_INITIAL
 
-  def update_v_cruise(self, CS, enabled, is_metric, reverse_acc_button_change):
+  #def update_v_cruise(self, CS, enabled, is_metric, reverse_acc_button_change):
+  def update_v_cruise(self, CS, enabled, is_metric):
+    
     self.v_cruise_kph_last = self.v_cruise_kph
 
     if CS.cruiseState.available:

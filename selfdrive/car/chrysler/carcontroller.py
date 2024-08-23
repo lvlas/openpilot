@@ -1,5 +1,5 @@
 from numpy import interp
-from cereal import car
+from cereal import car, messaging
 from openpilot.selfdrive.car.chrysler.chryslercan import create_lkas_hud, create_lkas_command, \
   create_wheel_buttons, create_mango_hud, create_op_acc_1, create_op_acc_2, create_op_dashboard, create_op_chime
 from opendbc.can.packer import CANPacker
@@ -7,18 +7,22 @@ from openpilot.common.realtime import DT_CTRL
 from openpilot.selfdrive.car import apply_meas_steer_torque_limits
 from openpilot.selfdrive.car.interfaces import GearShifter
 from openpilot.common.params import Params
+from openpilot.selfdrive.controls.lib.drive_helpers import V_CRUISE_MIN, V_CRUISE_MIN_IMPERIAL
+from openpilot.selfdrive.car.chrysler.long_carcontroller_v1 import LongCarControllerV1
 from openpilot.common.conversions import Conversions as CV
 from openpilot.common.numpy_fast import clip
 from openpilot.selfdrive.car.chrysler.chryslerlonghelper import cluster_chime, accel_hysteresis, accel_rate_limit, \
   cruiseiconlogic, setspeedlogic, SET_SPEED_MIN, DEFAULT_DECEL, STOP_GAS_THRESHOLD, START_BRAKE_THRESHOLD, \
   STOP_BRAKE_THRESHOLD, START_GAS_THRESHOLD, CHIME_GAP_TIME, ACCEL_SCALE, ACCEL_MIN, ACCEL_MAX
-from openpilot.selfdrive.car.chrysler.values import CAR, CarControllerParams, ChryslerFlags
+from openpilot.selfdrive.car.chrysler.values import CAR, RAM_CARS, CarControllerParams, ChryslerFlags
 from openpilot.selfdrive.car.interfaces import CarControllerBase
 
 LongCtrlState = car.CarControl.Actuators.LongControlState
 
 class CarController(CarControllerBase):
   def __init__(self, dbc_name, CP, VM):
+    self.sm = messaging.SubMaster(['longitudinalPlan'])    
+    self.frame = 0
     self.CP = CP
     self.apply_steer_last = 0
     self.ccframe = 0
@@ -73,8 +77,17 @@ class CarController(CarControllerBase):
     self.packer = CANPacker(dbc_name)
     self.params = CarControllerParams(CP)
 
-  def update(self, CC, CS, now_nanos):
+    #self.low_steer = not self.CP.flags & ChryslerFlags.HIGHER_MIN_STEERING_SPEED
+    self.steer_gap = 0.5 if self.CP.carFingerprint in RAM_CARS else 3.0
 
+    self.long_controller = LongCarControllerV1(self.CP, self.params, self.packer)  
+
+  def update(self, CC, CS, now_nanos):
+    can_sends = []
+    self.sm.update(0)
+    self.long_controller.acc(self.sm['longitudinalPlan'], self.frame, CC, CS, can_sends)
+
+    
     # *** compute control surfaces ***
     enabled = CC.enabled
     actuators = CC.actuators
@@ -321,3 +334,33 @@ class CarController(CarControllerBase):
     new_actuators.steerOutputCan = self.apply_steer_last
 
     return new_actuators, can_sends
+
+  def wheel_button_control(self, CC, CS, can_sends, enabled, das_bus, cancel, resume):
+    button_counter = CS.button_counter
+    if button_counter == self.last_button_frame:
+      return
+    self.last_button_frame = button_counter
+    if not self.long_controller.button_control(CC, CS):
+      self.button_frame += 1
+      button_counter_offset = 1
+      buttons_to_press = []
+      if cancel:
+        buttons_to_press = ['ACC_Cancel']
+      elif not button_pressed(CS.out, ButtonType.cancel):
+        if enabled and not CS.out.brakePressed:
+          button_counter_offset = [1, 1, 0, None][self.button_frame % 4]
+          if button_counter_offset is not None:
+            if resume:
+              buttons_to_press = ["ACC_Resume"]
+            elif CS.out.cruiseState.enabled:  # Control ACC
+              buttons_to_press = [self.auto_follow_button(CC, CS), self.hybrid_acc_button(CC, CS)]
+      # ACC Auto enable
+      if self.auto_enable_acc and self.frame < 50:
+        if not CS.out.cruiseState.available:
+          buttons_to_press.append("ACC_OnOff")
+        else:
+          self.auto_enable_acc = False
+      buttons_to_press = list(filter(None, buttons_to_press))
+      if buttons_to_press is not None and len(buttons_to_press) > 0:
+        new_msg = chryslercan.create_wheel_buttons_command(self.packer, das_bus, button_counter + button_counter_offset, buttons_to_press)
+        can_sends.append(new_msg)

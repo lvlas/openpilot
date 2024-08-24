@@ -280,11 +280,11 @@ class CarState(CarStateBase):
 
     if CP.carFingerprint in RAM_CARS:
       messages += CarState.get_cruise_messages()
-    else:
+    #else:
       # LKAS_HEARTBIT data needs to be forwarded!
-      forward_lkas_heartbit_messages = [
-        ("LKAS_HEARTBIT", 10),
-      ]
-      messages += forward_lkas_heartbit_messages
+    #  forward_lkas_heartbit_messages = [
+    #    ("LKAS_HEARTBIT", 10),
+    #  ]
+    #  messages += forward_lkas_heartbit_messages
     
     return CANParser(DBC[CP.carFingerprint]["pt"], messages, 2)

@@ -282,7 +282,7 @@ class CarState(CarStateBase):
     if CP.carFingerprint in RAM_CARS:
       messages += CarState.get_cruise_messages()
     else:
-       LKAS_HEARTBIT data needs to be forwarded!
+       #LKAS_HEARTBIT data needs to be forwarded!
       forward_lkas_heartbit_messages = [
         ("LKAS_HEARTBIT", 10),
       ]

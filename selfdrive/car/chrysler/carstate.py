@@ -152,7 +152,8 @@ class CarState(CarStateBase):
       ret.rightBlindspot = cp.vl["BLIND_SPOT_WARNINGS"]["BLIND_SPOT_RIGHT"] == 1
 
     self.lkas_counter = cp_cam.vl["LKAS_COMMAND"]["COUNTER"]
-    self.lkas_status_ok = cp_cam.vl["LKAS_HEARTBIT"]["LKAS_BUTTON_LED"]
+    #self.lkas_status_ok = cp_cam.vl["LKAS_HEARTBIT"]["LKAS_BUTTON_LED"]
+    self.lkasHeartbit = cp_cam.vl["LKAS_HEARTBIT"]    
     self.apa_steer_status = cp.vl["AUTO_PARK_REQUEST"]["APA_STEER_ACT"] == 1
     if self.CP.enablehybridEcu:
        if cp.vl["HYBRID_ECU"]["VEH_ON"] == 1:
@@ -274,17 +275,17 @@ class CarState(CarStateBase):
 
     messages = [
       ("LKAS_COMMAND", 100),
-      ("LKAS_HEARTBIT", 10),
+      #("LKAS_HEARTBIT", 10),
       ("LKAS_HUD", 4),
     ]
 
     if CP.carFingerprint in RAM_CARS:
       messages += CarState.get_cruise_messages()
-    #else:
-      # LKAS_HEARTBIT data needs to be forwarded!
-    #  forward_lkas_heartbit_messages = [
-    #    ("LKAS_HEARTBIT", 10),
-    #  ]
-    #  messages += forward_lkas_heartbit_messages
+    else:
+       LKAS_HEARTBIT data needs to be forwarded!
+      forward_lkas_heartbit_messages = [
+        ("LKAS_HEARTBIT", 10),
+      ]
+      messages += forward_lkas_heartbit_messages
     
     return CANParser(DBC[CP.carFingerprint]["pt"], messages, 2)

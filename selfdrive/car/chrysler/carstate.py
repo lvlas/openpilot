@@ -45,24 +45,21 @@ class CarState(CarStateBase):
     # gas pedal
     ret.gas = cp.vl["ECM_5"]["Accelerator_Position"]
     ret.gasPressed = ret.gas > 1e-5
-
-    # car speed
-    if self.CP.carFingerprint in RAM_CARS:
-      ret.vEgoRaw = cp.vl["ESP_8"]["Vehicle_Speed"] * CV.KPH_TO_MS
-      ret.gearShifter = self.parse_gear_shifter(self.shifter_values.get(cp.vl["Transmission_Status"]["Gear_State"], None))
-    else:
-      ret.vEgoRaw = (cp.vl["SPEED_1"]["SPEED_LEFT"] + cp.vl["SPEED_1"]["SPEED_RIGHT"]) / 2.
-      ret.gearShifter = self.parse_gear_shifter(self.shifter_values.get(cp.vl["GEAR"]["PRNDL"], None))
+    
+    ret.wheelSpeeds.fl = cp.vl["ESP_6"]["WHEEL_SPEED_FL"]
+    ret.wheelSpeeds.rr = cp.vl["ESP_6"]["WHEEL_SPEED_RR"]
+    ret.wheelSpeeds.rl = cp.vl["ESP_6"]["WHEEL_SPEED_RL"]
+    ret.wheelSpeeds.fr = cp.vl["ESP_6"]["WHEEL_SPEED_FR"]
+    ret.vEgoRaw = cp.vl["ESP_8"]["Vehicle_Speed"] * CV.KPH_TO_MS
     ret.vEgo, ret.aEgo = self.update_speed_kf(ret.vEgoRaw)
-    ret.standstill = not ret.vEgoRaw > 0.001
-    ret.wheelSpeeds = self.get_wheel_speeds(
-      cp.vl["ESP_6"]["WHEEL_SPEED_FL"],
-      cp.vl["ESP_6"]["WHEEL_SPEED_FR"],
-      cp.vl["ESP_6"]["WHEEL_SPEED_RL"],
-      cp.vl["ESP_6"]["WHEEL_SPEED_RR"],
-      unit=1,
-    )
-
+    ret.standstill = bool(cp.vl["ESP_8"]["Vehicle_Stopped"])
+    ret.gearShifter = self.parse_gear_shifter(self.shifter_values.get(cp.vl["GEAR"]["PRNDL"], None))
+    ret.steeringTorque = cp.vl["EPS_2"]["COLUMN_TORQUE"]/4
+    ret.steeringTorqueEps = cp.vl["EPS_2"]["EPS_TORQUE_MOTOR"]/4 #if Params().get_bool("ChryslerMangoLat") else cp.vl["EPS_2"]["TORQUE_MOTOR"]
+    ret.steeringPressed = abs(ret.steeringTorque) > STEER_THRESHOLD/4    
+    self.steerFaultPermanent = cp.vl["EPS_2"]["LKAS_STEER_FAULT"] == 4
+    self.lkas_counter = cp_cam.vl["LKAS_COMMAND"]["COUNTER"]    
+    
     # button presses
     ret.leftBlinker, ret.rightBlinker = self.update_blinker_from_stalk(200, cp.vl["STEERING_LEVERS"]["TURN_SIGNALS"] == 1,
                                                                        cp.vl["STEERING_LEVERS"]["TURN_SIGNALS"] == 2)
@@ -124,6 +121,8 @@ class CarState(CarStateBase):
       ("STEERING_LEVERS", 10),
       ("ORC_1", 2),
       ("BCM_1", 1),
+      ("SPEED_1", 100),
+      ("ESP_8", 50),      
     ]
 
     if CP.enableBsm:
@@ -131,14 +130,14 @@ class CarState(CarStateBase):
 
     if CP.carFingerprint in RAM_CARS:
       messages += [
-        ("ESP_8", 50),
+        #("ESP_8", 50),
         ("EPS_3", 50),
         ("Transmission_Status", 50),
       ]
     else:
       messages += [
         ("GEAR", 50),
-        ("SPEED_1", 100),
+        #("SPEED_1", 100),
       ]
       messages += CarState.get_cruise_messages()
 
@@ -148,6 +147,7 @@ class CarState(CarStateBase):
   def get_cam_can_parser(CP):
     messages = [
       ("DAS_6", 4),
+      ("LKAS_COMMAND", 100),      
     ]
 
     if CP.carFingerprint in RAM_CARS:

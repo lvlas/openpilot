@@ -30,8 +30,8 @@ class CarController(CarControllerBase):
         self.timer += 1
       else:
         self.timer = 99
-      else:
-        self.timer = 0
+    else:
+      self.timer = 0
 
     lkas_active = self.timer == 99 and  (self.ccframe >= 500)      
 

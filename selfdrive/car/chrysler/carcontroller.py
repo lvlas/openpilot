@@ -20,10 +20,34 @@ class CarController(CarControllerBase):
     self.packer = CANPacker(dbc_name)
     self.params = CarControllerParams(CP)
 
-  def update(self, CC, CS, now_nanos):
-    can_sends = []
+    self.timer = 0
+    self.ccframe = 0    
 
-    lkas_active = CC.latActive and self.lkas_control_bit_prev
+  def update(self, CC, CS, now_nanos):
+
+    if CC.enabled:
+      if self.timer < 99 and CS.out.vEgo < 65:
+        self.timer += 1
+      else:
+        self.timer = 99
+      else:
+        self.timer = 0
+
+    lkas_active = self.timer == 99 and  (self.ccframe >= 500)      
+
+    # steer torque
+    new_steer = int(round(actuators.steer * self.params.STEER_MAX))
+    apply_steer = apply_meas_steer_torque_limits(new_steer, self.apply_steer_last, CS.out.steeringTorqueEps, self.params)
+    if not lkas_active:
+      apply_steer = 0
+    self.apply_steer_last = apply_steer
+    can_sends = []
+    new_msg = create_lkas_command(self.packer, int(apply_steer), lkas_active, CS.lkas_counter)
+    can_sends.append(new_msg)       
+    
+    #can_sends = []
+
+    #lkas_active = CC.latActive and self.lkas_control_bit_prev
 
     # cruise buttons
     if (self.frame - self.last_button_frame)*DT_CTRL > 0.05:
@@ -67,16 +91,18 @@ class CarController(CarControllerBase):
         self.last_lkas_falling_edge = self.frame
       self.lkas_control_bit_prev = lkas_control_bit
 
-      # steer torque
-      new_steer = int(round(CC.actuators.steer * self.params.STEER_MAX))
-      apply_steer = apply_meas_steer_torque_limits(new_steer, self.apply_steer_last, CS.out.steeringTorqueEps, self.params)
-      if not lkas_active or not lkas_control_bit:
-        apply_steer = 0
-      self.apply_steer_last = apply_steer
+      # steer torque    JE PUVODNE TADY POD STEERINGEM NE HNED POD UPDATEM
+      #new_steer = int(round(CC.actuators.steer * self.params.STEER_MAX))
+      #apply_steer = apply_meas_steer_torque_limits(new_steer, self.apply_steer_last, CS.out.steeringTorqueEps, self.params)
+      #if not lkas_active or not lkas_control_bit:
+      #  apply_steer = 0
+      #self.apply_steer_last = apply_steer
 
-      can_sends.append(chryslercan.create_lkas_command(self.packer, self.CP, int(apply_steer), lkas_control_bit))
+      #can_sends.append(chryslercan.create_lkas_command(self.packer, self.CP, int(apply_steer), lkas_control_bit))
+     
 
     self.frame += 1
+    self.ccframe += 1  
 
     new_actuators = CC.actuators.as_builder()
     new_actuators.steer = self.apply_steer_last / self.params.STEER_MAX

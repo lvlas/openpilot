@@ -24,7 +24,7 @@ class CarController(CarControllerBase):
     self.ccframe = 0    
 
   def update(self, CC, CS, now_nanos):
-
+    actuators = CC.actuators
     if CC.enabled:
       if self.timer < 99 and CS.out.vEgo < 65:
         self.timer += 1

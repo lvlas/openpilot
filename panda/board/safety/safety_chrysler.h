@@ -4,7 +4,7 @@ const SteeringLimits CHRYSLER_STEERING_LIMITS = {
   .max_rt_interval = 250000,
   .max_rate_up = 3,
   .max_rate_down = 3,
-  .max_torque_error = 80,
+  .max_torque_error = 320, //80
   .type = TorqueMotorLimited,
 };
 
@@ -180,7 +180,7 @@ static void chrysler_rx_hook(const CANPacket_t *to_push) {
   // Measured EPS torque
   if ((bus == 0) && (addr == chrysler_addrs->EPS_2)) {
     int torque_meas_new = ((GET_BYTE(to_push, 4) & 0x7U) << 8) + GET_BYTE(to_push, 5) - 1024U;
-    update_sample(&torque_meas, torque_meas_new);
+    update_sample(&torque_meas, torque_meas_new/4);
   }
 
   // enter controls on rising edge of ACC, exit controls on ACC off

@@ -4,6 +4,7 @@ from openpilot.selfdrive.car import apply_meas_steer_torque_limits
 from openpilot.selfdrive.car.chrysler import chryslercan
 from openpilot.selfdrive.car.chrysler.values import RAM_CARS, CarControllerParams, ChryslerFlags
 from openpilot.selfdrive.car.interfaces import CarControllerBase
+from openpilot.selfdrive.car.chrysler.chryslercan import create_lkas_command
 
 
 class CarController(CarControllerBase):

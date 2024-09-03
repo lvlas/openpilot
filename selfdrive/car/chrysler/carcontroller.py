@@ -72,25 +72,25 @@ class CarController(CarControllerBase):
         self.hud_count += 1
 
     # steering
-    if self.frame % self.params.STEER_STEP == 0:
-
-      # TODO: can we make this more sane? why is it different for all the cars?
-      lkas_control_bit = self.lkas_control_bit_prev
-      if CS.out.vEgo > self.CP.minSteerSpeed:
-        lkas_control_bit = True
-      elif self.CP.flags & ChryslerFlags.HIGHER_MIN_STEERING_SPEED:
-        if CS.out.vEgo < (self.CP.minSteerSpeed - 3.0):
-          lkas_control_bit = False
-      elif self.CP.carFingerprint in RAM_CARS:
-        if CS.out.vEgo < (self.CP.minSteerSpeed - 0.5):
-          lkas_control_bit = False
-
-      # EPS faults if LKAS re-enables too quickly
-      lkas_control_bit = lkas_control_bit and (self.frame - self.last_lkas_falling_edge > 200)
-
-      if not lkas_control_bit and self.lkas_control_bit_prev:
-        self.last_lkas_falling_edge = self.frame
-      self.lkas_control_bit_prev = lkas_control_bit
+#    if self.frame % self.params.STEER_STEP == 0:
+#
+#      # TODO: can we make this more sane? why is it different for all the cars?
+#      lkas_control_bit = self.lkas_control_bit_prev
+#      if CS.out.vEgo > self.CP.minSteerSpeed:
+#        lkas_control_bit = True
+#      elif self.CP.flags & ChryslerFlags.HIGHER_MIN_STEERING_SPEED:
+#        if CS.out.vEgo < (self.CP.minSteerSpeed - 3.0):
+#          lkas_control_bit = False
+#      elif self.CP.carFingerprint in RAM_CARS:
+#        if CS.out.vEgo < (self.CP.minSteerSpeed - 0.5):
+#          lkas_control_bit = False
+#
+#      # EPS faults if LKAS re-enables too quickly
+#      lkas_control_bit = lkas_control_bit and (self.frame - self.last_lkas_falling_edge > 200)
+#
+#      if not lkas_control_bit and self.lkas_control_bit_prev:
+#        self.last_lkas_falling_edge = self.frame
+#      self.lkas_control_bit_prev = lkas_control_bit
 
       # steer torque    JE PUVODNE TADY POD STEERINGEM NE HNED POD UPDATEM
       #new_steer = int(round(CC.actuators.steer * self.params.STEER_MAX))

@@ -54,7 +54,7 @@ class CarState(CarStateBase):
     ret.vEgo, ret.aEgo = self.update_speed_kf(ret.vEgoRaw)
     ret.standstill = bool(cp.vl["ESP_8"]["Vehicle_Stopped"])
     ret.gearShifter = self.parse_gear_shifter(self.shifter_values.get(cp.vl["GEAR"]["PRNDL"], None))
-    ret.steeringTorque = cp.vl["EPS_2"]["TORQUE_DRIVER"]/4
+    ##########ret.steeringTorque = cp.vl["EPS_2"]["TORQUE_DRIVER"]/4
     ret.steeringTorqueEps = cp.vl["EPS_2"]["EPS_TORQUE_MOTOR"]/4 #if Params().get_bool("ChryslerMangoLat") else cp.vl["EPS_2"]["TORQUE_MOTOR"]
     ret.steeringPressed = abs(ret.steeringTorque) > STEER_THRESHOLD/4    
     self.steerFaultPermanent = cp.vl["EPS_2"]["LKAS_STEER_FAULT"] == 4
@@ -68,7 +68,7 @@ class CarState(CarStateBase):
     # steering wheel
     ret.steeringAngleDeg = cp.vl["STEERING"]["STEERING_ANGLE"] + cp.vl["STEERING"]["STEERING_ANGLE_HP"]
     ret.steeringRateDeg = cp.vl["STEERING"]["STEERING_RATE"]
-    #ret.steeringTorque = cp.vl["EPS_2"]["COLUMN_TORQUE"]
+    ret.steeringTorque = cp.vl["EPS_2"]["COLUMN_TORQUE"]/4 ### bylo bez deleni 
     #ret.steeringTorqueEps = cp.vl["EPS_2"]["EPS_TORQUE_MOTOR"]
     #ret.steeringPressed = abs(ret.steeringTorque) > STEER_THRESHOLD
 

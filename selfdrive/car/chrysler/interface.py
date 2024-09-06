@@ -81,7 +81,7 @@ class CarInterface(CarInterfaceBase):
     ret = self.CS.update(self.cp, self.cp_cam)
 
     ret.buttonEvents = create_button_events(self.CS.distance_button, self.CS.prev_distance_button, {1: ButtonType.gapAdjustCruise})
-    ret.steerError = self.CC.steerErrorMod
+    ret.steerFaultPermanent = self.CC.steerErrorMod
     # events
     events = self.create_common_events(ret, extra_gears=[car.CarState.GearShifter.low])
 

@@ -49,7 +49,7 @@ class CarController(CarControllerBase):
     lkas_active = self.timer == 99
     new_steer = int(round(CC.actuators.steer * self.params.STEER_MAX))
     apply_steer = apply_meas_steer_torque_limits(new_steer, self.apply_steer_last, CS.out.steeringTorqueEps, self.params)
-    if not lkas_active or not lkas_control_bit:
+    if not lkas_active: #or not lkas_control_bit:
       apply_steer = 0
 
     self.steer_rate_limited = new_steer != apply_steer

@@ -3,8 +3,8 @@ from openpilot.common.realtime import DT_CTRL
 from openpilot.selfdrive.car import apply_meas_steer_torque_limits
 from openpilot.selfdrive.car.chrysler import chryslercan
 from openpilot.selfdrive.car.chrysler.values import RAM_CARS, CarControllerParams, ChryslerFlags
-from openpilot.selfdrive.car.interfaces import CarControllerBase
-
+from openpilot.selfdrive.car.interfaces import CarControllerBase, GearShifter
+#from openpilot.selfdrive.car.interfaces import GearShifter
 
 class CarController(CarControllerBase):
   def __init__(self, dbc_name, CP, VM):

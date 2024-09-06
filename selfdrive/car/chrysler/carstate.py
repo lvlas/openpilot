@@ -91,8 +91,12 @@ class CarState(CarStateBase):
       ret.steerFaultTemporary = cp.vl["EPS_3"]["DASM_FAULT"] == 1
     else:
       ret.steerFaultTemporary = cp.vl["EPS_2"]["LKAS_TEMPORARY_FAULT"] == 1
-      ret.steerFaultPermanent = cp.vl["EPS_2"]["LKAS_STATE"] == 4
+      ret.steerFaultPermanent = cp.vl["EPS_2"]["LKAS_STATE"] == 4                                                   #self.steerError = cp.vl["EPS_STATUS"]["LKAS_STATE"] == 4
 
+    self.apaFault = cp.vl["EPS_2"]["APA_STEER_FAULT"] == 1
+    self.apasteerOn = cp.vl["EPS_STATUS"]["AUTO_PARK_HAS_CONTROL_2"] == 1
+    self.apa_steer_status = cp.vl["AUTO_PARK_REQUEST"]['APA_STEER_ACT'] == 1
+    
     # blindspot sensors
     if self.CP.enableBsm:
       ret.leftBlindspot = cp.vl["BSM_1"]["LEFT_STATUS"] == 1

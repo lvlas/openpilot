@@ -102,9 +102,9 @@ class CarControllerParams:
       self.STEER_DELTA_DOWN = 6
       self.STEER_MAX = 261  # EPS allows more, up to 350?
     else:
-      self.STEER_DELTA_UP = 3
-      self.STEER_DELTA_DOWN = 3
-      self.STEER_MAX = 261  # higher than this faults the EPS
+      self.STEER_DELTA_UP = 2 #
+      self.STEER_DELTA_DOWN = 2 #
+      self.STEER_MAX = 400  # higher than this faults the EPS 261
 
 
 STEER_THRESHOLD = 120

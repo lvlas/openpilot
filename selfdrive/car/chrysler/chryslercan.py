@@ -54,7 +54,7 @@ VisualAlert = car.CarControl.HUDControl.VisualAlert
 
 
 
-def create_lkas_hud(packer, gear, apa_active, apa_fault, hud_alert, enabled, hud_count, lkas_car_model, steer_type):
+def create_lkas_hud(packer, gear, apa_active, apa_fault, enabled, hud_count, lkas_car_model, steer_type):
   # LKAS_HUD 0x2a6 (678) Controls what lane-keeping icon is displayed.
 
   #if hud_alert == VisualAlert.steerRequired:

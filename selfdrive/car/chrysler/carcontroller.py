@@ -57,7 +57,7 @@ class CarController(CarControllerBase):
     if CS.out.standstill:
       self.steer_type = wp_type
     if wp_type != 2:
-      self.steerErrorMod = CS.steerError
+      self.steerErrorMod = CS.steerFaultPermanent #.steerError
       self.steer_type = int(0)
     elif CS.apaFault or CS.out.gearShifter not in (GearShifter.drive, GearShifter.low) or \
             abs(CS.out.steeringAngleDeg) > 330. or self.on_timer < 200 or CS.apa_steer_status:

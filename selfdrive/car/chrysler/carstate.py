@@ -96,6 +96,11 @@ class CarState(CarStateBase):
     self.apaFault = cp.vl["EPS_2"]["APA_STEER_FAULT"] == 1
     self.apasteerOn = cp.vl["EPS_2"]["AUTO_PARK_HAS_CONTROL_2"] == 1                #bylo v eps_status
     self.apa_steer_status = cp.vl["AUTO_PARK_REQUEST"]['APA_STEER_ACT'] == 1
+
+    self.lkas_counter = cp_cam.vl["LKAS_COMMAND"]['COUNTER']
+    #self.lkas_car_model = cp_cam.vl["LKAS_HUD"]['CAR_MODEL']
+    self.lkas_status_ok = cp_cam.vl["LKAS_HEARTBIT"]['LKAS_STATUS_OK']
+    self.veh_on = cp.vl["HYBRID_ECU"]['VEH_ON'] == 1    
     
     # blindspot sensors
     if self.CP.enableBsm:

@@ -128,6 +128,8 @@ class CarState(CarStateBase):
       ("STEERING_LEVERS", 10),
       ("ORC_1", 2),
       ("BCM_1", 1),
+      ("EPS_STATUS", 50),
+      ("AUTO_PARK_REQUEST", 50),      
     ]
 
     if CP.enableBsm:

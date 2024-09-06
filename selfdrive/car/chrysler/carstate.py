@@ -134,7 +134,8 @@ class CarState(CarStateBase):
       ("ORC_1", 2),
       ("BCM_1", 1),
       #("EPS_STATUS", 50),
-      ("AUTO_PARK_REQUEST", 50),      
+      ("AUTO_PARK_REQUEST", 50), 
+      ("LKAS_COMMAND", 50),      
     ]
 
     if CP.enableBsm:

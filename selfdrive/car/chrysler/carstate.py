@@ -135,7 +135,7 @@ class CarState(CarStateBase):
       ("BCM_1", 1),
       #("EPS_STATUS", 50),
       ("AUTO_PARK_REQUEST", 50), 
-      ("LKAS_COMMAND", 50),      
+    #  ("LKAS_COMMAND", 50),      
     ]
 
     if CP.enableBsm:
@@ -160,6 +160,7 @@ class CarState(CarStateBase):
   def get_cam_can_parser(CP):
     messages = [
       ("DAS_6", 4),
+      ("LKAS_COMMAND", 50),
     ]
 
     if CP.carFingerprint in RAM_CARS:

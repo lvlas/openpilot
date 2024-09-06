@@ -100,7 +100,7 @@ class CarState(CarStateBase):
     self.lkas_counter = cp_cam.vl["LKAS_COMMAND"]['COUNTER']
     #self.lkas_car_model = cp_cam.vl["LKAS_HUD"]['CAR_MODEL']
     self.lkas_status_ok = cp_cam.vl["LKAS_HEARTBIT"]['LKAS_STATUS_OK']
-    self.veh_on = cp.vl["HYBRID_ECU"]['VEH_ON'] == 1    
+    ###########self.veh_on = cp.vl["HYBRID_ECU"]['VEH_ON'] == 1    
     
     # blindspot sensors
     if self.CP.enableBsm:

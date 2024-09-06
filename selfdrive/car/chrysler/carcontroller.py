@@ -36,7 +36,7 @@ class CarController(CarControllerBase):
     if self.prev_frame == frame:
       return []  
     # *** compute control surfaces ***
-    if self.on_timer < 200 and CS.veh_on:
+    if self.on_timer < 200: ########and CS.veh_on:
       self.on_timer += 1
     wp_type = int(2)  
     if CC.enabled:

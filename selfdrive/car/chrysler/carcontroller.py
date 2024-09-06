@@ -86,7 +86,7 @@ class CarController(CarControllerBase):
     # HUD alerts
     if self.frame % 25 == 0:
       if CS.lkas_car_model != -1:
-        new_msg = chryslercan.create_lkas_hud(self.packer, CS.out.gearShifter, self.apaActive, CS.apaFault, hud_alert, lkas_active, self.hud_count, CS.lkas_car_model, self.steer_type)
+        new_msg = chryslercan.create_lkas_hud(self.packer, CS.out.gearShifter, self.apaActive, CS.apaFault, lkas_active, self.hud_count, CS.lkas_car_model, self.steer_type)
         can_sends.append(new_msg)
         #can_sends.append(chryslercan.create_lkas_hud(self.packer, self.CP, lkas_active, CC.hudControl.visualAlert,
         #                                             self.hud_count, CS.lkas_car_model, CS.auto_high_beam))

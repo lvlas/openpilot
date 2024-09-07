@@ -92,7 +92,7 @@ class CarController(CarControllerBase):
         #                                             self.hud_count, CS.lkas_car_model, CS.auto_high_beam))
         self.hud_count += 1
 
-    new_msg = chryslercan.create_lkas_command(self.packer, int(apply_steer), lkas_active, frame)
+    new_msg = chryslercan.create_lkas_command(self.packer, int(apply_steer), lkas_active, CS.lkas_counter) ###na konci byl frame
     self.ccframe += 1
     self.prev_frame = frame    
 

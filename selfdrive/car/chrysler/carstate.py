@@ -172,12 +172,12 @@ class CarState(CarStateBase):
       ("ESC_ACC_COPY", 50),
     ]
 
-    if CP.enablehybridEcu:
-      messages += [
-        ("HYBRID_ECU", 1),
-        ("AXLE_TORQ", 100),
-        ("HEV_HMI", 10),
-      ]
+    #if CP.enablehybridEcu:
+    #  messages += [
+    #    ("HYBRID_ECU", 1),
+    #    ("AXLE_TORQ", 100),
+    #    ("HEV_HMI", 10),
+    #  ]
 
     if CP.enableBsm:
       messages.append(("BLIND_SPOT_WARNINGS", 2))

@@ -69,16 +69,16 @@ class CarState(CarStateBase):
     ret.cruiseState.nonAdaptive = cp.vl["DASHBOARD"]["CRUISE_STATE"] in (1, 2)
 
 
-    self.desiredExperimentalToggleStatus = False
-    if cp.vl["DASHBOARD"]["CRUISE_ICON"] in (2, 8, 12):
-      ret.cruiseState.followSettings = 1
-    elif cp.vl["DASHBOARD"]["CRUISE_ICON"] in (3, 9, 13):
-      ret.cruiseState.followSettings = 2
-    elif cp.vl["DASHBOARD"]["CRUISE_ICON"] in (4, 10, 14):
-      ret.cruiseState.followSettings = 3
-    else:
-      ret.cruiseState.followSettings = 4
-      self.desiredExperimentalToggleStatus = True
+    #self.desiredExperimentalToggleStatus = False
+    #if cp.vl["DASHBOARD"]["CRUISE_ICON"] in (2, 8, 12):
+    #  ret.cruiseState.followSettings = 1
+    #elif cp.vl["DASHBOARD"]["CRUISE_ICON"] in (3, 9, 13):
+    #  ret.cruiseState.followSettings = 2
+    #elif cp.vl["DASHBOARD"]["CRUISE_ICON"] in (4, 10, 14):
+    #  ret.cruiseState.followSettings = 3
+    #else:
+    #  ret.cruiseState.followSettings = 4
+    #  self.desiredExperimentalToggleStatus = True
 
     if self.desiredExperimentalToggleStatus != Params().get_bool('ExperimentalMode'):
       Params().put_bool("ExperimentalMode", self.desiredExperimentalToggleStatus)

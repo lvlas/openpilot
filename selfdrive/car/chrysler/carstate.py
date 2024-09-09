@@ -104,22 +104,22 @@ class CarState(CarStateBase):
     self.lkas_counter = cp_cam.vl["LKAS_COMMAND"]["COUNTER"]
     self.lkas_status_ok = cp_cam.vl["LKAS_HEARTBIT"]["LKAS_BUTTON_LED"]
     self.apa_steer_status = cp.vl["AUTO_PARK_REQUEST"]["APA_STEER_ACT"] == 1
-    if self.CP.enablehybridEcu:
-       if cp.vl["HYBRID_ECU"]["VEH_ON"] == 1:
-         self.veh_on_timer += 1
-       else:
-         self.veh_on_timer = 0
-       self.veh_on = self.veh_on_timer >= 50
-       self.axle_torq = cp.vl["AXLE_TORQ"]["AXLE_TORQ"]
-       self.axle_torq_max = cp.vl["AXLE_TORQ"]["AXLE_TORQ_MAX"]
-       self.axle_torq_min = cp.vl["AXLE_TORQ"]["AXLE_TORQ_MIN"]
-       self.hybrid_power_meter = cp.vl["HEV_HMI"]["ELEC_MODE_PERCENT"]
-    else:
-      self.veh_on_timer += 1
-      self.veh_on = self.veh_on_timer >= 200
-      self.axle_torq_min = 20.
-      self.axle_torq_max = 300.
-      self.hybrid_power_meter = 1
+    #if self.CP.enablehybridEcu:
+    #   if cp.vl["HYBRID_ECU"]["VEH_ON"] == 1:
+    #     self.veh_on_timer += 1
+    #   else:
+    #     self.veh_on_timer = 0
+    #   self.veh_on = self.veh_on_timer >= 50
+    #   self.axle_torq = cp.vl["AXLE_TORQ"]["AXLE_TORQ"]
+    #   self.axle_torq_max = cp.vl["AXLE_TORQ"]["AXLE_TORQ_MAX"]
+    #   self.axle_torq_min = cp.vl["AXLE_TORQ"]["AXLE_TORQ_MIN"]
+    #   self.hybrid_power_meter = cp.vl["HEV_HMI"]["ELEC_MODE_PERCENT"]
+    #else:
+    self.veh_on_timer += 1
+    self.veh_on = self.veh_on_timer >= 200
+    self.axle_torq_min = 20.
+    self.axle_torq_max = 300.
+    self.hybrid_power_meter = 1
 
     self.acc_hold = bool(cp.vl["ACC_2"]["ACC_STOP"])
     self.lead_dist = cp.vl["DASHBOARD"]["LEAD_DIST"]

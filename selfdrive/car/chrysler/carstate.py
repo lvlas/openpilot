@@ -80,10 +80,10 @@ class CarState(CarStateBase):
     #  ret.cruiseState.followSettings = 4
     #  self.desiredExperimentalToggleStatus = True
 
-    if self.desiredExperimentalToggleStatus != Params().get_bool('ExperimentalMode'):
-      Params().put_bool("ExperimentalMode", self.desiredExperimentalToggleStatus)
-    if self.desiredExperimentalToggleStatus != Params().get_bool('ExperimentalLongitudinalEnabled'):
-      Params().put_bool("ExperimentalLongitudinalEnabled", self.desiredExperimentalToggleStatus)
+    #if self.desiredExperimentalToggleStatus != Params().get_bool('ExperimentalMode'):
+    #  Params().put_bool("ExperimentalMode", self.desiredExperimentalToggleStatus)
+    #if self.desiredExperimentalToggleStatus != Params().get_bool('ExperimentalLongitudinalEnabled'):
+    #  Params().put_bool("ExperimentalLongitudinalEnabled", self.desiredExperimentalToggleStatus)
 
     ret.steeringTorque = cp.vl["EPS_2"]["TORQUE_DRIVER"]/4
     ret.steeringTorqueEps = cp.vl["EPS_2"]["TORQUE_MOTOR"]/4 #if Params().get_bool("ChryslerMangoLat") else cp.vl["EPS_2"]["TORQUE_MOTOR"]

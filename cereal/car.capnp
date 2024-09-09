@@ -5,24 +5,6 @@ $Cxx.namespace("cereal");
 
 # ******* events causing controls state machine transition *******
 
-struct JvePilotState {
-  carState @0 :JvePilotState.CarState;
-  carControl @1 :JvePilotState.CarControl;
-
-  struct CarState {
-    accFollowDistance @0 :UInt8;
-    pedalPressedAmount @1 :Float32;
-    longControl @2 :Bool;
-  }
-
-  struct CarControl {
-    autoFollow @0 :Bool;
-    accEco @1 :UInt8;
-    vMaxCruise @2 :Float32;
-    aolcAvailable @3 :Bool;
-  }
-}
-
 struct CarEvent @0x9b1657f34caf3ad3 {
   name @0 :EventName;
 
@@ -305,7 +287,7 @@ enum FollowSettings {
 
   # deprecated
   errorsDEPRECATED @0 :List(CarEvent.EventName);
-  jvePilotCarState @19 :JvePilotState.CarState;  # repurposed for jvePilot
+  brakeLightsDEPRECATED @19 :Bool;
   steeringRateLimitedDEPRECATED @29 :Bool;
   canMonoTimesDEPRECATED @12: List(UInt64);
   canRcvTimeoutDEPRECATED @49 :Bool;
@@ -465,8 +447,6 @@ struct CarParams {
   carName @0 :Text;
   carFingerprint @1 :Text;
   fuzzyFingerprint @55 :Bool;
-
-
 
   notCar @66 :Bool;  # flag for non-car robotics platforms
 

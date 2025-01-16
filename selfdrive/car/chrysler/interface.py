@@ -67,14 +67,14 @@ class CarInterface(CarInterfaceBase):
       ret.lateralTuning.init('pid')
       ret.lateralTuning.pid.kiBP = [0.0]
       ret.lateralTuning.pid.kpBP = [0.0]
-      ret.lateralTuning.pid.kpV = [0.02]
-      ret.lateralTuning.pid.kiV = [0.002]
-      ret.lateralTuning.pid.kf = 0.00008      
+      ret.lateralTuning.pid.kpV = [0.015]
+      ret.lateralTuning.pid.kiV = [0.001]
+      ret.lateralTuning.pid.kf = 0.00004      
       ret.minSteerSpeed = 0.0
 
     # Ram
     elif candidate == CAR.RAM_1500_5TH_GEN:
-      ret.steerActuatorDelay = 0.2
+      ret.steerActuatorDelay = 0.15
       ret.wheelbase = 3.88
       # Older EPS FW allow steer to zero
       if any(fw.ecu == 'eps' and b"68" < fw.fwVersion[:4] <= b"6831" for fw in car_fw):

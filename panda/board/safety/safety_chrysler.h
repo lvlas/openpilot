@@ -1,5 +1,5 @@
 const SteeringLimits CHRYSLER_STEERING_LIMITS = {
-  .max_steer = 261,
+  .max_steer = 1500,//261,
   .max_rt_delta = 112,
   .max_rt_interval = 250000,
   .max_rate_up = 3,

@@ -57,7 +57,7 @@ class CarInterface(CarInterfaceBase):
 
     # Jeep
     elif candidate in (CAR.JEEP_GRAND_CHEROKEE, CAR.JEEP_GRAND_CHEROKEE_2019):
-      ret.steerActuatorDelay = 0.12 #nebylo nic
+      ret.steerActuatorDelay = 0.10 #nebylo nic
 #
       #ret.lateralTuning.init('pid')
       #ret.lateralTuning.pid.kpBP, ret.lateralTuning.pid.kiBP = [[9., 20.], [9., 20.]]
@@ -66,10 +66,10 @@ class CarInterface(CarInterfaceBase):
 
       ret.lateralTuning.init('pid')
       ret.lateralTuning.pid.kiBP = [0.0]
-      ret.lateralTuning.pid.kpBP = [0.0]
-      ret.lateralTuning.pid.kpV = [0.016]
-      ret.lateralTuning.pid.kiV = [0.0003]
-      ret.lateralTuning.pid.kf = 0.00004      
+      ret.lateralTuning.pid.kpBP = [0.0,10.0,20.0]
+      ret.lateralTuning.pid.kpV = [0.019,0.018,0.016]
+      ret.lateralTuning.pid.kiV = [0.0004]
+      ret.lateralTuning.pid.kf = 0.00006      
       ret.minSteerSpeed = 0.0
 
     # Ram

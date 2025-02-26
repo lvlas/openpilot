@@ -64,12 +64,19 @@ class CarInterface(CarInterfaceBase):
       #ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.15, 0.30], [0.03, 0.05]]
       #ret.lateralTuning.pid.kf = 0.00006
 
+      #ret.lateralTuning.init('pid')
+      #ret.lateralTuning.pid.kiBP = [0.0]
+      #ret.lateralTuning.pid.kpBP = [0.0,10.0,20.0]
+      #ret.lateralTuning.pid.kpV = [0.019,0.018,0.016]
+      #ret.lateralTuning.pid.kiV = [0.0004]
+      #ret.lateralTuning.pid.kf = 0.00006      
+      #ret.minSteerSpeed = 0.0
       ret.lateralTuning.init('pid')
       ret.lateralTuning.pid.kiBP = [0.0]
-      ret.lateralTuning.pid.kpBP = [0.0,10.0,20.0]
-      ret.lateralTuning.pid.kpV = [0.019,0.018,0.016]
-      ret.lateralTuning.pid.kiV = [0.0004]
-      ret.lateralTuning.pid.kf = 0.00006      
+      ret.lateralTuning.pid.kpBP = [0.0,5.0,15.0]
+      ret.lateralTuning.pid.kpV = [0.018,0.016,0.014]
+      ret.lateralTuning.pid.kiV = [0.0003]
+      ret.lateralTuning.pid.kf = 0.00007      
       ret.minSteerSpeed = 0.0
 
     # Ram
